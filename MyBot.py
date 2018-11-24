@@ -67,7 +67,7 @@ while True:
             return random.choice([Direction.North, Direction.South, Direction.East, Direction.West])
 
         if ship.is_full():
-            directions_to_shipyard = game_map.get_unsafe_moves(ship.position, me.shipyard.position)
+            directions_to_shipyard = game_map.naive_navigate(ship.position, me.shipyard.position)
             return directions_to_shipyard[0]
 
 
