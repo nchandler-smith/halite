@@ -65,13 +65,20 @@ while True:
     def move_to_most_halite():
         if turn_counter == 0:
             return random.choice([Direction.North, Direction.South, Direction.East, Direction.West])
-        directions = ship.position.get_surrounding_cardinals()
-        max_halite = 0
-        direction_to_move = random.choice(directions)
-        for direction in directions:
-            test_location = ship.position.directional_offset(direction)
-            local_halite = game_map[test_location].halite_amount
-            if local_halite > max_halite:
-                direction_to_move = direction
-                max_halite = local_halite
-        return direction_to_move
+
+        if ship.is_full():
+            directions_to_shipyard = game_map.get_unsafe_moves(ship.position, me.shipyard.position)
+            return directions_to_shipyard[0]
+
+
+        else:
+            directions = ship.position.get_surrounding_cardinals()
+            max_halite = 0
+            direction_to_move = random.choice(directions)
+            for direction in directions:
+                test_location = ship.position.directional_offset(direction)
+                local_halite = game_map[test_location].halite_amount
+                if local_halite > max_halite:
+                    direction_to_move = direction
+                    max_halite = local_halite
+            return direction_to_move
