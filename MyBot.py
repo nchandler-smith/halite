@@ -44,6 +44,7 @@ while True:
     # A command queue holds all the commands you will run this turn. You build this list up and submit it at the
     #   end of the turn.
     command_queue = []
+    turn_counter += 1
 
     for ship in me.get_ships():
         # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
@@ -63,7 +64,8 @@ while True:
 
 
     def move_to_most_halite():
-        if turn_counter == 0:
+
+        if turn_counter == 1:
             return random.choice([Direction.North, Direction.South, Direction.East, Direction.West])
 
         if ship.is_full():
