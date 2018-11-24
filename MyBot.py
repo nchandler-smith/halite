@@ -50,7 +50,7 @@ while True:
         if game_map[ship.position].halite_amount < constants.MAX_HALITE / 10 or ship.is_full:
             command_queue.append(
                 ship.move(
-                    random.choice([ Direction.North, Direction.South, Direction.East, Direction.West ])))
+                    random.choice(moveToMostHalite())))
         else:
             command_queue.append(ship.stay_still())
 
@@ -62,3 +62,7 @@ while True:
     # Send your moves back to the game environment, ending this turn.
     game.end_turn(command_queue)
 
+
+    def moveToMostHalite():
+        directions = [Direction.North, Direction.South, Direction.East, Direction.West]
+        return directions
