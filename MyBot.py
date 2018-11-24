@@ -68,7 +68,7 @@ while True:
 
         if ship.is_full():
             directions_to_shipyard = game_map.naive_navigate(ship.position, me.shipyard.position)
-            return directions_to_shipyard[0]
+            return directions_to_shipyard
 
 
         else:
