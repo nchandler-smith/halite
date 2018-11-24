@@ -24,6 +24,7 @@ game = hlt.Game()
 # At this point "game" variable is populated with initial map data.
 # This is a good place to do computationally expensive start-up pre-processing.
 # As soon as you call "ready" function below, the 2 second per turn timer will start.
+turn_counter = 0
 game.ready("LikeABotOutOfHalite")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
@@ -48,9 +49,7 @@ while True:
         # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
         #   Else, collect halite.
         if game_map[ship.position].halite_amount < constants.MAX_HALITE / 10 or ship.is_full:
-            command_queue.append(
-                ship.move(
-                    random.choice(moveToMostHalite())))
+            command_queue.append(ship.move(move_to_most_halite()))
         else:
             command_queue.append(ship.stay_still())
 
@@ -63,6 +62,16 @@ while True:
     game.end_turn(command_queue)
 
 
-    def moveToMostHalite():
-        directions = [Direction.North, Direction.South, Direction.East, Direction.West]
-        return directions
+    def move_to_most_halite():
+        if turn_counter == 0:
+            return random.choice([Direction.North, Direction.South, Direction.East, Direction.West])
+        directions = ship.position.get_surrounding_cardinals()
+        max_halite = 0
+        direction_to_move = random.choice(directions)
+        for direction in directions:
+            test_location = ship.position.directional_offset(direction)
+            local_halite = game_map[test_location].halite_amount
+            if local_halite > max_halite:
+                direction_to_move = direction
+                max_halite = local_halite
+        return direction_to_move
