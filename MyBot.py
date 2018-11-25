@@ -70,17 +70,27 @@ while True:
 
         if ship.is_full or ship_status[ship.id] == 'returning':
             if ship.position == me.shipyard.position:
-                ship_status[ship.id] = 'exploring'
-                directions = explore_safe_directions()
-                move = find_direction_most_halite(directions)
+                move = get_move_exploring()
             else:
-                ship_status[ship.id] = 'returning'
-                move = game_map.naive_navigate(ship, me.shipyard.position)
+                move = get_move_returning_ship()
 
         else:
-            directions = explore_safe_directions()
-            move = find_direction_most_halite(directions)
-            claim_location(move)
+            move = get_move_exploring()
+        return move
+
+
+    def get_move_exploring():
+        ship_status[ship.id] = 'exploring'
+        directions = explore_safe_directions()
+        move = find_direction_most_halite(directions)
+        claim_location(move)
+        return move
+
+
+    def get_move_returning_ship():
+        ship_status[ship.id] = 'returning'
+        move = game_map.naive_navigate(ship, me.shipyard.position)
+        claim_location(move)
         return move
 
     def explore_safe_directions():
@@ -107,3 +117,4 @@ while True:
 
     def claim_location(move):
         claimed_locations[ship.id] = ship.position.directional_offset(move)
+        game_map[ship.position.directional_offset(move)].mark_unsafe(ship)
