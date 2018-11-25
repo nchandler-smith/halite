@@ -63,19 +63,14 @@ while True:
 
     def make_a_move():
 
-        if ship.is_full():
-            directions_to_shipyard = game_map.naive_navigate(ship.position, me.shipyard.position)
-            return directions_to_shipyard
+        if ship.id % 4 == 0:
+            return Direction.North
+
+        if ship.id % 4 == 1:
+            return Direction.South
+
+        if ship.id % 4 == 2:
+            return Direction.East
 
         else:
-            directions = ship.position.get_surrounding_cardinals()
-            max_halite = 0
-            direction_to_move = random.choice(directions)
-            for direction in directions:
-                test_location = ship.position.directional_offset(direction)
-                possible_move = game_map[test_location]
-                local_halite = [possible_move].halite_amount
-                if local_halite > max_halite and possible_move.is_empty:
-                    direction_to_move = direction
-                    max_halite = local_halite
-            return direction_to_move
+            return Direction.West

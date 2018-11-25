@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8dd86b1e-a86e-4632-a9a8-1ec7aae8c870" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/MyBot.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="63" column="22" selection-start-line="63" selection-start-column="22" selection-end-line="63" selection-end-column="22" />
+            <state relative-caret-position="200">
+              <caret line="71" column="27" selection-start-line="71" selection-start-column="27" selection-end-line="71" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -41,7 +42,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="744" />
     <option name="y" value="228" />
-    <option name="width" value="875" />
+    <option name="width" value="936" />
     <option name="height" value="744" />
   </component>
   <component name="ProjectView">
@@ -91,15 +92,15 @@
       <updated>1543086495114</updated>
       <workItem from="1543086498283" duration="169000" />
       <workItem from="1543087539435" duration="2462000" />
-      <workItem from="1543096676835" duration="3085000" />
+      <workItem from="1543096676835" duration="3673000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5838000" />
+    <option name="totallyTimeSpent" value="6500000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="744" y="228" width="875" height="744" extended-state="0" />
+    <frame x="744" y="228" width="936" height="744" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.20940171" />
@@ -131,8 +132,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="63" column="22" selection-start-line="63" selection-start-column="22" selection-end-line="63" selection-end-column="22" />
+        <state relative-caret-position="200">
+          <caret line="71" column="27" selection-start-line="71" selection-start-column="27" selection-end-line="71" selection-end-column="27" />
         </state>
       </provider>
     </entry>
