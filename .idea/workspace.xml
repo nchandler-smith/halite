@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="251">
-              <caret line="59" column="30" selection-start-line="59" selection-start-column="30" selection-end-line="59" selection-end-column="30" />
+            <state relative-caret-position="669">
+              <caret line="93" column="8" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="8" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
@@ -42,9 +42,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="92" />
-    <option name="y" value="103" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="x" value="406" />
+    <option name="y" value="117" />
     <option name="width" value="936" />
     <option name="height" value="744" />
   </component>
@@ -52,7 +52,10 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes />
+    <panes>
+      <pane id="ProjectPane" />
+      <pane id="Scope" />
+    </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -83,21 +86,23 @@
       <workItem from="1543086498283" duration="169000" />
       <workItem from="1543087539435" duration="2462000" />
       <workItem from="1543096676835" duration="3673000" />
+      <workItem from="1543156068359" duration="1104000" />
+      <workItem from="1543172728581" duration="3089000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18329000" />
+    <option name="totallyTimeSpent" value="24300000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="92" y="103" width="936" height="744" extended-state="0" />
+    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.20940171" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3297546" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32959184" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -150,8 +155,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="59" column="30" selection-start-line="59" selection-start-column="30" selection-end-line="59" selection-end-column="30" />
+        <state relative-caret-position="669">
+          <caret line="93" column="8" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="8" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>

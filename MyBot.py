@@ -45,7 +45,7 @@ while True:
     # A command queue holds all the commands you will run this turn. You build this list up and submit it at the
     #   end of the turn.
     command_queue = []
-
+    claimed_locations = {}
     for ship in me.get_ships():
         # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
         #   Else, collect halite.
@@ -57,7 +57,7 @@ while True:
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if game.turn_number <= 200 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
+    if game.turn_number <= 300 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.
@@ -70,28 +70,41 @@ while True:
 
         if ship.is_full or ship_status[ship.id] == 'returning':
             if ship.position == me.shipyard.position:
-                ship_status[ship.id] = 'exploring'
-                directions = explore_safe_directions()
-                move = find_direction_most_halite(directions)
+                move = get_move_exploring()
             else:
-                ship_status[ship.id] = 'returning'
-                move = game_map.naive_navigate(ship, me.shipyard.position)
+                move = get_move_returning_ship()
 
         else:
-            directions = explore_safe_directions()
-            move = find_direction_most_halite(directions)
+            move = get_move_exploring()
         return move
 
-    def explore_safe_directions():
+
+    def get_move_exploring():
+        ship_status[ship.id] = 'exploring'
+        directions = find_safe_directions()
+        move = find_direction_most_halite(directions)
+        claim_location(move)
+        return move
+
+
+    def get_move_returning_ship():
+        ship_status[ship.id] = 'returning'
+        return_move = game_map.naive_navigate(ship, me.shipyard.position)
+        claim_location(return_move)
+        return return_move
+
+    def find_safe_directions():
         directions = [Direction.North, Direction.South, Direction.East, Direction.West]
         safe_directions = []
         for direction in directions:
             test_location = ship.position.directional_offset(direction)
-            if not game_map[test_location].is_occupied:
+            if not game_map[test_location].is_occupied and test_location not in list(claimed_locations.values()):
                 safe_directions.append(direction)
         return safe_directions
 
     def find_direction_most_halite(directions):
+        if len(directions) == 0:
+            return (0,0)
         max_halite_found = 0
         best_direction = random.choice(directions)
         for direction in directions:
@@ -101,3 +114,7 @@ while True:
                 max_halite_found = test_halite_amount
                 best_direction = direction
         return best_direction
+
+    def claim_location(move):
+        claimed_locations[ship.id] = ship.position.directional_offset(move)
+        game_map[ship.position.directional_offset(move)].mark_unsafe(ship)
