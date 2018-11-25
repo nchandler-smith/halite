@@ -31,7 +31,6 @@ game.ready("LikeABotOutOfHalite")
 logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
-
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
@@ -54,8 +53,12 @@ while True:
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if game.turn_number <= 200 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
+    if game.turn_number <= 200 \
+    and me.halite_amount >= constants.SHIP_COST \
+    and not game_map[me.shipyard].is_occupied\
+    and game.turn_number - spawned_ship_at_turn > 4:
         command_queue.append(me.shipyard.spawn())
+        spawned_ship_at_turn = game.turn_number
 
     # Send your moves back to the game environment, ending this turn.
     game.end_turn(command_queue)
@@ -66,5 +69,4 @@ while True:
         if ship.id % 2 == 0:
             return Direction.North
 
-        else:
-            return Direction.West
+        return Direction.West
