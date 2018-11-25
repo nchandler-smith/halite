@@ -34,7 +34,6 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
 ship_status = {}
-claimed_locations = []
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
