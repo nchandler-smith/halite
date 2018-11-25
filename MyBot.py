@@ -34,6 +34,7 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
 ship_status = {}
+claimed_locations = []
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
@@ -45,7 +46,7 @@ while True:
     # A command queue holds all the commands you will run this turn. You build this list up and submit it at the
     #   end of the turn.
     command_queue = []
-
+    claimed_locations = []
     for ship in me.get_ships():
         # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
         #   Else, collect halite.
@@ -80,6 +81,7 @@ while True:
         else:
             directions = explore_safe_directions()
             move = find_direction_most_halite(directions)
+            claim_location(move)
         return move
 
     def explore_safe_directions():
@@ -87,11 +89,13 @@ while True:
         safe_directions = []
         for direction in directions:
             test_location = ship.position.directional_offset(direction)
-            if not game_map[test_location].is_occupied:
+            if not game_map[test_location].is_occupied and test_location not in claimed_locations:
                 safe_directions.append(direction)
         return safe_directions
 
     def find_direction_most_halite(directions):
+        if len(directions) == 0:
+            return (0,0)
         max_halite_found = 0
         best_direction = random.choice(directions)
         for direction in directions:
@@ -101,3 +105,6 @@ while True:
                 max_halite_found = test_halite_amount
                 best_direction = direction
         return best_direction
+
+    def claim_location(move):
+        claimed_locations.append(ship.position.directional_offset(move))
