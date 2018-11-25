@@ -81,7 +81,7 @@ while True:
 
     def get_move_exploring():
         ship_status[ship.id] = 'exploring'
-        directions = explore_safe_directions()
+        directions = find_safe_directions()
         move = find_direction_most_halite(directions)
         claim_location(move)
         return move
@@ -89,11 +89,11 @@ while True:
 
     def get_move_returning_ship():
         ship_status[ship.id] = 'returning'
-        move = game_map.naive_navigate(ship, me.shipyard.position)
-        claim_location(move)
-        return move
+        return_move = game_map.naive_navigate(ship, me.shipyard.position)
+        claim_location(return_move)
+        return return_move
 
-    def explore_safe_directions():
+    def find_safe_directions():
         directions = [Direction.North, Direction.South, Direction.East, Direction.West]
         safe_directions = []
         for direction in directions:
