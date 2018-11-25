@@ -2,6 +2,8 @@
 # Python 3.6
 
 # Import the Halite SDK, which will let you interact with the game.
+from typing import List, Any
+
 import hlt
 
 # This library contains constant values.
@@ -24,8 +26,6 @@ game = hlt.Game()
 # At this point "game" variable is populated with initial map data.
 # This is a good place to do computationally expensive start-up pre-processing.
 # As soon as you call "ready" function below, the 2 second per turn timer will start.
-directions = [Direction.North, Direction.West]
-ship_spawned_last_turn = False
 game.ready("LikeABotOutOfHalite")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
@@ -33,6 +33,7 @@ game.ready("LikeABotOutOfHalite")
 logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
+ship_status = {}
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
@@ -44,33 +45,58 @@ while True:
     # A command queue holds all the commands you will run this turn. You build this list up and submit it at the
     #   end of the turn.
     command_queue = []
-    ship_counter = 0
-    for ship in me.get_ships():
 
+    for ship in me.get_ships():
         # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
         #   Else, collect halite.
         if game_map[ship.position].halite_amount < constants.MAX_HALITE / 10 or ship.is_full:
-            command_queue.append(ship.move(make_a_move(ship_counter)))
+            command_queue.append(ship.move(determine_move()))
         else:
             command_queue.append(ship.stay_still())
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if game.turn_number <= 300 \
-    and me.halite_amount >= constants.SHIP_COST \
-    and not game_map[me.shipyard].is_occupied \
-    and not ship_spawned_last_turn:
+    if game.turn_number <= 300 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
-        ship_spawned_last_turn = True
-
-    else:
-        ship_spawned_last_turn = False
 
     # Send your moves back to the game environment, ending this turn.
     game.end_turn(command_queue)
 
-    def make_a_move(ship_counter):
-        ship_counter += 1
-        if ship_counter % 2 == 0:
-            return Direction.North
-        return Direction.West
+
+    def determine_move():
+        if ship.id not in ship_status:
+            ship_status[ship.id] = 'exploring'
+
+        if ship.is_full or ship_status[ship.id] == 'returning':
+            if ship.position == me.shipyard.position:
+                ship_status[ship.id] = 'exploring'
+                directions = explore_safe_directions()
+                move = find_direction_most_halite(directions)
+            else:
+                ship_status[ship.id] = 'returning'
+                move = game_map.naive_navigate(ship, me.shipyard.position)
+
+        else:
+            directions = explore_safe_directions()
+            move = find_direction_most_halite(directions)
+        return move
+
+    def explore_safe_directions():
+        directions = [Direction.North, Direction.South, Direction.East, Direction.West]
+        safe_directions = []
+        for direction in directions:
+            test_location = ship.position.directional_offset(direction)
+            if not game_map[test_location].is_occupied:
+                safe_directions.append(direction)
+        return safe_directions
+
+    def find_direction_most_halite(directions):
+        max_halite_found = 0
+        best_direction = random.choice(directions)
+        for direction in directions:
+            test_location = ship.position.directional_offset(direction)
+            test_halite_amount = game_map[test_location].halite_amount
+            if test_halite_amount > max_halite_found:
+                max_halite_found = test_halite_amount
+                best_direction = direction
+        return best_direction
