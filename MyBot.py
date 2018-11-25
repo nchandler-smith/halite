@@ -94,7 +94,7 @@ while True:
         return return_move
 
     def find_safe_directions():
-        directions = [Direction.North, Direction.South, Direction.East, Direction.West]
+        directions = [Direction.North, Direction.South, Direction.East, Direction.West, (0,0)]
         safe_directions = []
         for direction in directions:
             test_location = ship.position.directional_offset(direction)
@@ -113,7 +113,10 @@ while True:
             if test_halite_amount > max_halite_found:
                 max_halite_found = test_halite_amount
                 best_direction = direction
-        return best_direction
+        if max_halite_found >= 100:
+            return best_direction
+        else:
+            return random.choice(directions)
 
     def claim_location(move):
         claimed_locations[ship.id] = ship.position.directional_offset(move)
