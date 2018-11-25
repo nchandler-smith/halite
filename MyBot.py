@@ -55,7 +55,8 @@ while True:
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
     if game.turn_number <= 300 \
     and me.halite_amount >= constants.SHIP_COST \
-    and not game_map[me.shipyard].is_occupied:
+    and not game_map[me.shipyard].is_occupied\
+    and me.get_ships().count() < 4:
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.
