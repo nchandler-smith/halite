@@ -2,6 +2,8 @@
 # Python 3.6
 
 # Import the Halite SDK, which will let you interact with the game.
+from typing import List, Any
+
 import hlt
 
 # This library contains constant values.
@@ -31,7 +33,7 @@ game.ready("LikeABotOutOfHalite")
 logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
-
+ship_status = {}
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
@@ -47,8 +49,9 @@ while True:
     for ship in me.get_ships():
         # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
         #   Else, collect halite.
+        move = determine_move()
         if game_map[ship.position].halite_amount < constants.MAX_HALITE / 10 or ship.is_full:
-            command_queue.append(ship.move(make_a_move()))
+            command_queue.append(ship.move(move))
         else:
             command_queue.append(ship.stay_still())
 
@@ -61,21 +64,40 @@ while True:
     game.end_turn(command_queue)
 
 
-    def make_a_move():
+    def determine_move():
+        if ship.id not in ship_status:
+            ship_status[ship.id] = 'exploring'
 
-        if ship.is_full():
-            directions_to_shipyard = game_map.naive_navigate(ship.position, me.shipyard.position)
-            return directions_to_shipyard
+        if ship.is_full or ship_status[ship.id] == 'returning':
+            if ship.position == me.shipyard.position:
+                ship_status[ship.id] = 'exploring'
+                directions = explore_safe_directions()
+                move = find_direction_most_halite(directions)
+            else:
+                ship_status[ship.id] = 'returning'
+                move = game_map.naive_navigate(ship, me.shipyard.position)
 
         else:
-            directions = ship.position.get_surrounding_cardinals()
-            max_halite = 0
-            direction_to_move = random.choice(directions)
-            for direction in directions:
-                test_location = ship.position.directional_offset(direction)
-                possible_move = game_map[test_location]
-                local_halite = [possible_move].halite_amount
-                if local_halite > max_halite and possible_move.is_empty:
-                    direction_to_move = direction
-                    max_halite = local_halite
-            return direction_to_move
+            directions = explore_safe_directions()
+            move = find_direction_most_halite(directions)
+        return move
+
+    def explore_safe_directions():
+        directions = [Direction.North, Direction.South, Direction.East, Direction.West]
+        safe_directions = []
+        for direction in directions:
+            test_location = ship.position.directional_offset(direction)
+            if not game_map[test_location].is_occupied:
+                safe_directions.append(direction)
+        return safe_directions
+
+    def find_direction_most_halite(directions):
+        max_halite_found = 0
+        best_direction = random.choice(directions)
+        for direction in directions:
+            test_location = ship.position.directional_offset(direction)
+            test_halite_amount = game_map[test_location].halite_amount
+            if test_halite_amount > max_halite_found:
+                max_halite_found = test_halite_amount
+                best_direction = direction
+        return best_direction
