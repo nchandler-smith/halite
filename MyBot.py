@@ -42,8 +42,8 @@ while True:
     # A command queue holds all the commands you will run this turn. You build this list up and submit it at the
     #   end of the turn.
     command_queue = []
-
     for ship in me.get_ships():
+
         # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
         #   Else, collect halite.
         if game_map[ship.position].halite_amount < constants.MAX_HALITE / 10 or ship.is_full:
@@ -55,8 +55,8 @@ while True:
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
     if game.turn_number <= 300 \
     and me.halite_amount >= constants.SHIP_COST \
-    and not game_map[me.shipyard].is_occupied\
-    and me.get_ships().count() < 4:
+    and not game_map[me.shipyard].is_occupied \
+    and len(me.get_ships()) < 4:
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.
