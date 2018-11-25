@@ -63,14 +63,8 @@ while True:
 
     def make_a_move():
 
-        if ship.id % 4 == 0:
+        if ship.id % 2 == 0:
             return Direction.North
-
-        if ship.id % 4 == 1:
-            return Direction.South
-
-        if ship.id % 4 == 2:
-            return Direction.East
 
         else:
             return Direction.West
