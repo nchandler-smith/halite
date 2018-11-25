@@ -53,12 +53,10 @@ while True:
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if game.turn_number <= 200 \
+    if game.turn_number <= 300 \
     and me.halite_amount >= constants.SHIP_COST \
-    and not game_map[me.shipyard].is_occupied\
-    and game.turn_number - spawned_ship_at_turn > 4:
+    and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
-        spawned_ship_at_turn = game.turn_number
 
     # Send your moves back to the game environment, ending this turn.
     game.end_turn(command_queue)
@@ -66,7 +64,10 @@ while True:
 
     def make_a_move():
 
-        if ship.id % 2 == 0:
+        if ship.id % 4 == 0:
             return Direction.North
-
+        if ship.id % 4 == 1:
+            return Direction.South
+        if ship.id % 4 == 2:
+            return Direction.East
         return Direction.West
