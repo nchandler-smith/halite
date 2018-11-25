@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="59" column="30" selection-start-line="59" selection-start-column="30" selection-end-line="59" selection-end-column="30" />
+            <state relative-caret-position="230">
+              <caret line="110" column="12" selection-end-line="129" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
@@ -43,8 +43,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="27" />
-    <option name="y" value="51" />
+    <option name="x" value="79" />
+    <option name="y" value="32" />
     <option name="width" value="936" />
     <option name="height" value="744" />
   </component>
@@ -92,10 +92,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25079000" />
+    <option name="totallyTimeSpent" value="25596000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="27" y="51" width="936" height="744" extended-state="0" />
+    <frame x="79" y="32" width="936" height="744" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.20940171" />
@@ -155,8 +155,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="59" column="30" selection-start-line="59" selection-start-column="30" selection-end-line="59" selection-end-column="30" />
+        <state relative-caret-position="230">
+          <caret line="110" column="12" selection-end-line="129" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>

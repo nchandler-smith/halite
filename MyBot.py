@@ -74,7 +74,7 @@ while True:
             else:
                 move = get_move_returning_ship()
 
-        else:
+        else:  # exploring
             move = get_move_exploring()
         return move
 
@@ -108,8 +108,7 @@ while True:
         max_halite_found = 0
         best_direction = random.choice(directions)
         for direction in directions:
-            test_location = ship.position.directional_offset(direction)
-            test_halite_amount = game_map[test_location].halite_amount
+            test_halite_amount = get_halite_in_direction(direction)
             if test_halite_amount > max_halite_found:
                 max_halite_found = test_halite_amount
                 best_direction = direction
@@ -117,6 +116,13 @@ while True:
             return best_direction
         else:
             return random.choice(directions)
+
+
+    def get_halite_in_direction(direction):
+        test_location = ship.position.directional_offset(direction)
+        test_halite_amount = game_map[test_location].halite_amount
+        return test_halite_amount
+
 
     def claim_location(move):
         claimed_locations[ship.id] = ship.position.directional_offset(move)
