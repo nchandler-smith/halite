@@ -45,7 +45,7 @@ while True:
     # A command queue holds all the commands you will run this turn. You build this list up and submit it at the
     #   end of the turn.
     command_queue = []
-    claimed_locations = []
+    claimed_locations = {}
     for ship in me.get_ships():
         # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
         #   Else, collect halite.
@@ -57,7 +57,7 @@ while True:
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if game.turn_number <= 200 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
+    if game.turn_number <= 300 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.
@@ -88,7 +88,7 @@ while True:
         safe_directions = []
         for direction in directions:
             test_location = ship.position.directional_offset(direction)
-            if not game_map[test_location].is_occupied and test_location not in claimed_locations:
+            if not game_map[test_location].is_occupied and test_location not in list(claimed_locations.values()):
                 safe_directions.append(direction)
         return safe_directions
 
@@ -106,4 +106,4 @@ while True:
         return best_direction
 
     def claim_location(move):
-        claimed_locations.append(ship.position.directional_offset(move))
+        claimed_locations[ship.id] = ship.position.directional_offset(move)
