@@ -33,7 +33,11 @@ game.ready("LikeABotOutOfHalite")
 logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
+SPAWN_TURN_LIMIT = 200
+HELLA_HALITE_THRESHOLD = 1500
+
 ship_status = {}
+hella_halite_locations = []
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
@@ -57,7 +61,9 @@ while True:
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if game.turn_number <= 200 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
+    if game.turn_number <= SPAWN_TURN_LIMIT \
+    and me.halite_amount >= constants.SHIP_COST \
+    and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.
@@ -68,9 +74,21 @@ while True:
         if ship.id not in ship_status:
             ship_status[ship.id] = 'exploring'
 
+        if ship_status[ship.id] == 'heading_hella_halite':
+            if game_map.calculate_distance(ship.position, hella_halite_locations[0]) <= 1:
+                ship_status[ship.id] = 'exploring'
+
+        if ship_status[ship.id] == 'heading_hella_halite':
+            if len(hella_halite_locations) > 0:
+                move = get_move_hella_halite()
+                return move
+
         if ship.is_full or ship_status[ship.id] == 'returning':
             if ship.position == me.shipyard.position:
-                move = get_move_exploring()
+                if len(hella_halite_locations) > 0:
+                    move = get_move_hella_halite()
+                else:
+                    move = get_move_exploring()
             else:
                 move = get_move_returning_ship()
 
@@ -93,6 +111,12 @@ while True:
         claim_location(return_move)
         return return_move
 
+    def get_move_hella_halite():
+        ship_status[ship.id] = 'heading_hella_halite'
+        move = game_map.naive_navigate(ship, hella_halite_locations[0])
+        claim_location(move)
+        return move
+
     def find_safe_directions():
         directions = [Direction.North, Direction.South, Direction.East, Direction.West, (0,0)]
         safe_directions = []
@@ -106,12 +130,16 @@ while True:
         if len(directions) == 0:
             return (0,0)
         max_halite_found = 0
+        total_halite_found = 0
         best_direction = random.choice(directions)
         for direction in directions:
             test_halite_amount = get_halite_in_direction(direction)
+            total_halite_found += test_halite_amount
             if test_halite_amount > max_halite_found:
                 max_halite_found = test_halite_amount
                 best_direction = direction
+        if total_halite_found > HELLA_HALITE_THRESHOLD:
+            hella_halite_locations.append(ship.position.directional_offset(best_direction))
         if max_halite_found >= 100:
             return best_direction
         else:
