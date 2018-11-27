@@ -35,6 +35,8 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 """ <<<Game Loop>>> """
 SPAWN_TURN_LIMIT = 200
 HELLA_HALITE_THRESHOLD = 1500
+HARVEST_HALITE_LOWER_LIMIT = 100
+DIRECTION_STAY = (0,0)
 
 ship_status = {}
 hella_halite_locations = []
@@ -75,13 +77,20 @@ while True:
             ship_status[ship.id] = 'exploring'
 
         if ship_status[ship.id] == 'heading_hella_halite':
-            if game_map.calculate_distance(ship.position, hella_halite_locations[0]) <= 1:
+            if len(hella_halite_locations) > 0:
+                if game_map.calculate_distance(ship.position, hella_halite_locations[0]) <= 1:
+                    ship_status[ship.id] = 'exploring'
+            else:  # hella_halite_locations is empty
                 ship_status[ship.id] = 'exploring'
 
         if ship_status[ship.id] == 'heading_hella_halite':
             if len(hella_halite_locations) > 0:
-                move = get_move_hella_halite()
-                return move
+                if game_map[hella_halite_locations[0]].halite_amount > 1.1* HARVEST_HALITE_LOWER_LIMIT:
+                    move = get_move_hella_halite()
+                    return move
+                else:
+                    hella_halite_locations.pop(0)
+                    determine_move()
 
         if ship.is_full or ship_status[ship.id] == 'returning':
             if ship.position == me.shipyard.position:
@@ -118,7 +127,7 @@ while True:
         return move
 
     def find_safe_directions():
-        directions = [Direction.North, Direction.South, Direction.East, Direction.West, (0,0)]
+        directions = [Direction.North, Direction.South, Direction.East, Direction.West, DIRECTION_STAY]
         safe_directions = []
         for direction in directions:
             test_location = ship.position.directional_offset(direction)
@@ -128,7 +137,7 @@ while True:
 
     def find_direction_most_halite(directions):
         if len(directions) == 0:
-            return (0,0)
+            return DIRECTION_STAY
         max_halite_found = 0
         total_halite_found = 0
         best_direction = random.choice(directions)
@@ -140,7 +149,7 @@ while True:
                 best_direction = direction
         if total_halite_found > HELLA_HALITE_THRESHOLD:
             hella_halite_locations.append(ship.position.directional_offset(best_direction))
-        if max_halite_found >= 100:
+        if max_halite_found >= HARVEST_HALITE_LOWER_LIMIT:
             return best_direction
         else:
             return random.choice(directions)
