@@ -33,9 +33,9 @@ game.ready("LikeABotOutOfHalite")
 logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
-SPAWN_TURN_LIMIT = 225
+SPAWN_TURN_LIMIT = 175
 HELLA_HALITE_THRESHOLD = 1500
-HARVEST_HALITE_LOWER_LIMIT = 80
+HARVEST_HALITE_LOWER_LIMIT = 100
 DIRECTION_STAY = (0,0)
 
 ship_status = {}
