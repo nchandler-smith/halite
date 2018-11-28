@@ -166,14 +166,26 @@ while True:
         game_map[ship.position.directional_offset(move)].mark_unsafe(ship)
 
     def smart_navigate(ship, destination):
+        x = 0
+        y=1
+
         ship_position_tuple = ship.position.x, ship.position.y
         destination_position_tuple = destination.x, destination.y
+
         distance_tuple = calculate_distance_tuple(destination_position_tuple, ship_position_tuple)
-        abs_distance_tuple = abs(distance_tuple[0]), abs(distance_tuple[1])
-        if abs_distance_tuple[0] > abs_distance_tuple[1]:
-            return abs_distance_tuple[0] // distance_tuple[0], 0
+        abs_distance_tuple = abs(distance_tuple[x]), abs(distance_tuple[y])
+
+        safe_directions = find_safe_directions()
+
+        if abs_distance_tuple[x] > abs_distance_tuple[y]:
+            move =  abs_distance_tuple[x] // distance_tuple[x], 0
         else:
-            return 0, abs_distance_tuple[1] // distance_tuple[1]
+            move =  0, abs_distance_tuple[y] // distance_tuple[y]
+
+        if move in safe_directions:
+            return move
+        else:
+            return DIRECTION_STAY
 
     def calculate_distance_tuple(location_1, location_2):
         return location_1[0] - location_2[0], location_1[1] - location_2[1]
