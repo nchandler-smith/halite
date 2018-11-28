@@ -33,9 +33,9 @@ game.ready("LikeABotOutOfHalite")
 logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
-SPAWN_TURN_LIMIT = 200
+SPAWN_TURN_LIMIT = 225
 HELLA_HALITE_THRESHOLD = 1500
-HARVEST_HALITE_LOWER_LIMIT = 100
+HARVEST_HALITE_LOWER_LIMIT = 80
 DIRECTION_STAY = (0,0)
 
 ship_status = {}
@@ -184,8 +184,10 @@ while True:
 
         if move in safe_directions:
             return move
-        else:
+        elif len(safe_directions) == 0:
             return DIRECTION_STAY
+        else:
+            return random.choice(safe_directions)
 
     def calculate_distance_tuple(location_1, location_2):
         return location_1[0] - location_2[0], location_1[1] - location_2[1]
