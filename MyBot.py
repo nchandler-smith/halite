@@ -33,9 +33,9 @@ game.ready("LikeABotOutOfHalite")
 logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
-SPAWN_TURN_LIMIT = 200
+SPAWN_TURN_LIMIT = 225
 HELLA_HALITE_THRESHOLD = 1500
-HARVEST_HALITE_LOWER_LIMIT = 100
+HARVEST_HALITE_LOWER_LIMIT = 80
 DIRECTION_STAY = (0,0)
 
 ship_status = {}
@@ -116,13 +116,13 @@ while True:
 
     def get_move_returning_ship():
         ship_status[ship.id] = 'returning'
-        return_move = game_map.naive_navigate(ship, me.shipyard.position)
+        return_move = smart_navigate(ship, me.shipyard.position)
         claim_location(return_move)
         return return_move
 
     def get_move_hella_halite():
         ship_status[ship.id] = 'heading_hella_halite'
-        move = game_map.naive_navigate(ship, hella_halite_locations[0])
+        move = smart_navigate(ship, hella_halite_locations[0])
         claim_location(move)
         return move
 
@@ -164,3 +164,30 @@ while True:
     def claim_location(move):
         claimed_locations[ship.id] = ship.position.directional_offset(move)
         game_map[ship.position.directional_offset(move)].mark_unsafe(ship)
+
+    def smart_navigate(ship, destination):
+        x = 0
+        y=1
+
+        ship_position_tuple = ship.position.x, ship.position.y
+        destination_position_tuple = destination.x, destination.y
+
+        distance_tuple = calculate_distance_tuple(destination_position_tuple, ship_position_tuple)
+        abs_distance_tuple = abs(distance_tuple[x]), abs(distance_tuple[y])
+
+        safe_directions = find_safe_directions()
+
+        if abs_distance_tuple[x] > abs_distance_tuple[y]:
+            move =  abs_distance_tuple[x] // distance_tuple[x], 0
+        else:
+            move =  0, abs_distance_tuple[y] // distance_tuple[y]
+
+        if move in safe_directions:
+            return move
+        elif len(safe_directions) == 0:
+            return DIRECTION_STAY
+        else:
+            return random.choice(safe_directions)
+
+    def calculate_distance_tuple(location_1, location_2):
+        return location_1[0] - location_2[0], location_1[1] - location_2[1]
