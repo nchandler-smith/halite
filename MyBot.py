@@ -116,13 +116,13 @@ while True:
 
     def get_move_returning_ship():
         ship_status[ship.id] = 'returning'
-        return_move = game_map.naive_navigate(ship, me.shipyard.position)
+        return_move = smart_navigate(ship, me.shipyard.position)
         claim_location(return_move)
         return return_move
 
     def get_move_hella_halite():
         ship_status[ship.id] = 'heading_hella_halite'
-        move = game_map.naive_navigate(ship, hella_halite_locations[0])
+        move = smart_navigate(ship, hella_halite_locations[0])
         claim_location(move)
         return move
 
@@ -164,3 +164,16 @@ while True:
     def claim_location(move):
         claimed_locations[ship.id] = ship.position.directional_offset(move)
         game_map[ship.position.directional_offset(move)].mark_unsafe(ship)
+
+    def smart_navigate(ship, destination):
+        ship_position_tuple = ship.position.x, ship.position.y
+        destination_position_tuple = destination.x, destination.y
+        distance_tuple = calculate_distance_tuple(destination_position_tuple, ship_position_tuple)
+        abs_distance_tuple = abs(distance_tuple[0]), abs(distance_tuple[1])
+        if abs_distance_tuple[0] > abs_distance_tuple[1]:
+            return abs_distance_tuple[0] // distance_tuple[0], 0
+        else:
+            return 0, abs_distance_tuple[1] // distance_tuple[1]
+
+    def calculate_distance_tuple(location_1, location_2):
+        return location_1[0] - location_2[0], location_1[1] - location_2[1]
