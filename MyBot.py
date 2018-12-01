@@ -4,13 +4,16 @@
 # Import the Halite SDK, which will let you interact with the game.
 from typing import List, Any
 
-import hlt
+from hlt import Game
 
 # This library contains constant values.
 from hlt import constants
 
 # This library contains direction metadata to better interface with the game.
 from hlt.positionals import Direction
+
+# Import position class for navigation
+from hlt.positionals import Position
 
 # This library allows you to generate random numbers.
 import random
@@ -22,7 +25,7 @@ import logging
 """ <<<Game Begin>>> """
 
 # This game object contains the initial game state.
-game = hlt.Game()
+game = Game()
 # At this point "game" variable is populated with initial map data.
 # This is a good place to do computationally expensive start-up pre-processing.
 # As soon as you call "ready" function below, the 2 second per turn timer will start.
@@ -174,7 +177,7 @@ while True:
         most_halite_at_a_position = 0
         for x_pos in range(game_map.width):
             for y_pos in range(game_map.height):
-                test_position = hlt.positionals.Position(x_pos, y_pos)
+                test_position = Position(x_pos, y_pos)
                 test_position_halite_amount = game_map[test_position].halite_amount
                 if test_position_halite_amount > most_halite_at_a_position:
                     most_halite_at_a_position = test_position_halite_amount
