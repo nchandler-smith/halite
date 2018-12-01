@@ -4,13 +4,16 @@
 # Import the Halite SDK, which will let you interact with the game.
 from typing import List, Any
 
-import hlt
+from hlt import Game
 
 # This library contains constant values.
 from hlt import constants
 
 # This library contains direction metadata to better interface with the game.
 from hlt.positionals import Direction
+
+# Import position class for navigation
+from hlt.positionals import Position
 
 # This library allows you to generate random numbers.
 import random
@@ -22,7 +25,7 @@ import logging
 """ <<<Game Begin>>> """
 
 # This game object contains the initial game state.
-game = hlt.Game()
+game = Game()
 # At this point "game" variable is populated with initial map data.
 # This is a good place to do computationally expensive start-up pre-processing.
 # As soon as you call "ready" function below, the 2 second per turn timer will start.
@@ -33,13 +36,12 @@ game.ready("LikeABotOutOfHalite")
 logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
-SPAWN_TURN_LIMIT = 225
-HELLA_HALITE_THRESHOLD = 1500
-HARVEST_HALITE_LOWER_LIMIT = 80
+SPAWN_TURN_LIMIT = 175
+HARVEST_HALITE_LOWER_LIMIT = 100
 DIRECTION_STAY = (0,0)
 
 ship_status = {}
-hella_halite_locations = []
+ship_desitnation = {}  # used for going to regions of most halite
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
@@ -73,35 +75,26 @@ while True:
 
 
     def determine_move():
+
         if ship.id not in ship_status:
-            ship_status[ship.id] = 'exploring'
+            ship_status[ship.id] = 'heading_hella_halite'
+            ship_desitnation[ship.id] = get_position_most_halite()
 
         if ship_status[ship.id] == 'heading_hella_halite':
-            if len(hella_halite_locations) > 0:
-                if game_map.calculate_distance(ship.position, hella_halite_locations[0]) <= 1:
-                    ship_status[ship.id] = 'exploring'
-            else:  # hella_halite_locations is empty
+            if game_map.calculate_distance(ship.position, ship_desitnation[ship.id]) <= 1:
                 ship_status[ship.id] = 'exploring'
-
-        if ship_status[ship.id] == 'heading_hella_halite':
-            if len(hella_halite_locations) > 0:
-                if game_map[hella_halite_locations[0]].halite_amount > 1.1* HARVEST_HALITE_LOWER_LIMIT:
-                    move = get_move_hella_halite()
-                    return move
-                else:
-                    hella_halite_locations.pop(0)
-                    determine_move()
+            else:
+                move = get_move_hella_halite()
 
         if ship.is_full or ship_status[ship.id] == 'returning':
             if ship.position == me.shipyard.position:
-                if len(hella_halite_locations) > 0:
-                    move = get_move_hella_halite()
-                else:
-                    move = get_move_exploring()
+                ship_status[ship.id] = 'heading_hella_halite'
+                ship_desitnation[ship.id] = get_position_most_halite()
+                move = get_move_hella_halite()
             else:
                 move = get_move_returning_ship()
 
-        else:  # exploring
+        if ship_status[ship.id] == 'exploring':
             move = get_move_exploring()
         return move
 
@@ -122,7 +115,7 @@ while True:
 
     def get_move_hella_halite():
         ship_status[ship.id] = 'heading_hella_halite'
-        move = smart_navigate(ship, hella_halite_locations[0])
+        move = smart_navigate(ship, ship_desitnation[ship.id])
         claim_location(move)
         return move
 
@@ -147,13 +140,10 @@ while True:
             if test_halite_amount > max_halite_found:
                 max_halite_found = test_halite_amount
                 best_direction = direction
-        if total_halite_found > HELLA_HALITE_THRESHOLD:
-            hella_halite_locations.append(ship.position.directional_offset(best_direction))
         if max_halite_found >= HARVEST_HALITE_LOWER_LIMIT:
             return best_direction
         else:
             return random.choice(directions)
-
 
     def get_halite_in_direction(direction):
         test_location = ship.position.directional_offset(direction)
@@ -166,28 +156,40 @@ while True:
         game_map[ship.position.directional_offset(move)].mark_unsafe(ship)
 
     def smart_navigate(ship, destination):
-        x = 0
-        y=1
-
-        ship_position_tuple = ship.position.x, ship.position.y
-        destination_position_tuple = destination.x, destination.y
-
-        distance_tuple = calculate_distance_tuple(destination_position_tuple, ship_position_tuple)
-        abs_distance_tuple = abs(distance_tuple[x]), abs(distance_tuple[y])
-
         safe_directions = find_safe_directions()
-
-        if abs_distance_tuple[x] > abs_distance_tuple[y]:
-            move =  abs_distance_tuple[x] // distance_tuple[x], 0
-        else:
-            move =  0, abs_distance_tuple[y] // distance_tuple[y]
-
-        if move in safe_directions:
-            return move
-        elif len(safe_directions) == 0:
+        if len(safe_directions) == 0:
             return DIRECTION_STAY
-        else:
-            return random.choice(safe_directions)
+
+        min_distance = 1000
+        best_direction = random.choice(safe_directions)
+        for direction in safe_directions:
+            test_location = ship.position.directional_offset(direction)
+            distance = game_map.calculate_distance(test_location, destination)
+            if distance < min_distance:
+                min_distance = distance
+                best_direction = direction
+        return best_direction
 
     def calculate_distance_tuple(location_1, location_2):
         return location_1[0] - location_2[0], location_1[1] - location_2[1]
+
+    def get_position_most_halite():
+        most_halite_at_a_position = 0
+        for x_pos in range(game_map.width):
+            for y_pos in range(game_map.height):
+                test_position = Position(x_pos, y_pos)
+                test_position_halite_amount = game_map[test_position].halite_amount
+                if test_position_halite_amount > most_halite_at_a_position:
+                    most_halite_at_a_position = test_position_halite_amount
+                    position_most_halite =test_position
+        return position_most_halite
+
+    # def map_halite():
+    #     game_height = game_map.height
+    #     game_width = game_map.width
+    #     halite_map = [[]]
+    #
+    #     for x_pos in range(game_width):
+    #         for y_pos in range (game_height):
+    #             halite_map[x_pos, y_pos] = game_map[(x_pos, y_pos)].halite_amount
+    #     return halite_map
