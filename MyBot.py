@@ -36,8 +36,9 @@ game.ready("LikeABotOutOfHalite")
 logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
+SHIP_LOWER_LIMIT = 5
 SPAWN_TURN_LIMIT = 175
-HARVEST_HALITE_LOWER_LIMIT = 100
+HARVEST_HALITE_LOWER_LIMIT = 10
 DIRECTION_STAY = (0,0)
 
 ship_status = {}
@@ -65,7 +66,7 @@ while True:
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if game.turn_number <= SPAWN_TURN_LIMIT \
+    if (game.turn_number <= SPAWN_TURN_LIMIT or len(me.get_ships()) < SHIP_LOWER_LIMIT) \
     and me.halite_amount >= constants.SHIP_COST \
     and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
@@ -137,7 +138,7 @@ while True:
         return safe_directions
 
     def find_direction_most_halite(directions):
-        if len(directions) == 0:
+        if len(directions) == 0 or get_halite_in_direction(DIRECTION_STAY) >= HARVEST_HALITE_LOWER_LIMIT:
             return DIRECTION_STAY
         max_halite_found = 0
         total_halite_found = 0
