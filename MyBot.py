@@ -176,6 +176,8 @@ while True:
             if distance < min_distance:
                 min_distance = distance
                 best_direction = direction
+            if distance == min_distance:
+                best_direction = random.choice([direction, best_direction])
         return best_direction
 
     def calculate_distance_tuple(location_1, location_2):
