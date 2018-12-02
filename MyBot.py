@@ -57,7 +57,7 @@ while True:
     for ship in me.get_ships():
         # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
         #   Else, collect halite.
-        move = determine_move()
+        move = determine_move(ship)
         if game_map[ship.position].halite_amount < constants.MAX_HALITE / 10 or ship.is_full:
             command_queue.append(ship.move(move))
         else:
@@ -74,29 +74,34 @@ while True:
     game.end_turn(command_queue)
 
 
-    def determine_move():
+    def determine_move(ship):
 
-        if ship.id not in ship_status:
-            ship_status[ship.id] = 'heading_hella_halite'
-            ship_desitnation[ship.id] = get_position_most_halite()
-
-        if ship_status[ship.id] == 'heading_hella_halite':
-            if game_map.calculate_distance(ship.position, ship_desitnation[ship.id]) <= 1:
-                ship_status[ship.id] = 'exploring'
-            else:
-                move = get_move_hella_halite()
-
-        if ship.is_full or ship_status[ship.id] == 'returning':
-            if ship.position == me.shipyard.position:
-                ship_status[ship.id] = 'heading_hella_halite'
-                ship_desitnation[ship.id] = get_position_most_halite()
-                move = get_move_hella_halite()
-            else:
-                move = get_move_returning_ship()
+        ship_at_shipyard_goes_hella_halite()
+        validate_heading_hella_halite_status()
 
         if ship_status[ship.id] == 'exploring':
             move = get_move_exploring()
+
+        if ship_status[ship.id] == 'heading_hella_halite':
+            move = get_move_hella_halite()
+
+        if ship.is_full or ship_status[ship.id] == 'returning':
+            move = get_move_returning_ship()
+
         return move
+
+
+    def validate_heading_hella_halite_status():
+        if ship_status[ship.id] == 'heading_hella_halite':
+            if ship_desitnation.get(ship.id) is None:
+                ship_desitnation[ship.id] = get_position_most_halite()
+            if game_map.calculate_distance(ship.position, ship_desitnation[ship.id]) <= 1:
+                ship_status[ship.id] = 'exploring'
+
+
+    def ship_at_shipyard_goes_hella_halite():
+        if ship.position == me.shipyard.position or ship.id not in ship_status:
+            ship_status[ship.id] = 'heading_hella_halite'
 
 
     def get_move_exploring():
@@ -120,7 +125,10 @@ while True:
         return move
 
     def find_safe_directions():
-        directions = [Direction.North, Direction.South, Direction.East, Direction.West, DIRECTION_STAY]
+        if ship_status[ship.id] == 'exploring':
+            directions = [Direction.North, Direction.South, Direction.East, Direction.West, DIRECTION_STAY]
+        else:
+            directions = [Direction.North, Direction.South, Direction.East, Direction.West]
         safe_directions = []
         for direction in directions:
             test_location = ship.position.directional_offset(direction)
