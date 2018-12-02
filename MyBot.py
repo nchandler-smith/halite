@@ -76,22 +76,22 @@ while True:
 
     def determine_move(ship):
 
-        ship_at_shipyard_goes_hella_halite()
-        validate_heading_hella_halite_status()
+        ship_at_shipyard_goes_hella_halite(ship)
+        validate_heading_hella_halite_status(ship)
 
         if ship_status[ship.id] == 'exploring':
-            move = get_move_exploring()
+            move = get_move_exploring(ship)
 
         if ship_status[ship.id] == 'heading_hella_halite':
-            move = get_move_hella_halite()
+            move = get_move_hella_halite(ship)
 
         if ship.is_full or ship_status[ship.id] == 'returning':
-            move = get_move_returning_ship()
+            move = get_move_returning_ship(ship)
 
         return move
 
 
-    def validate_heading_hella_halite_status():
+    def validate_heading_hella_halite_status(ship):
         if ship_status[ship.id] == 'heading_hella_halite':
             if ship_desitnation.get(ship.id) is None:
                 ship_desitnation[ship.id] = get_position_most_halite()
@@ -99,32 +99,32 @@ while True:
                 ship_status[ship.id] = 'exploring'
 
 
-    def ship_at_shipyard_goes_hella_halite():
+    def ship_at_shipyard_goes_hella_halite(ship):
         if ship.position == me.shipyard.position or ship.id not in ship_status:
             ship_status[ship.id] = 'heading_hella_halite'
 
 
-    def get_move_exploring():
+    def get_move_exploring(ship):
         ship_status[ship.id] = 'exploring'
-        directions = find_safe_directions()
+        directions = find_safe_directions(ship)
         move = find_direction_most_halite(directions)
         claim_location(move)
         return move
 
 
-    def get_move_returning_ship():
+    def get_move_returning_ship(ship):
         ship_status[ship.id] = 'returning'
         return_move = smart_navigate(ship, me.shipyard.position)
         claim_location(return_move)
         return return_move
 
-    def get_move_hella_halite():
+    def get_move_hella_halite(ship):
         ship_status[ship.id] = 'heading_hella_halite'
         move = smart_navigate(ship, ship_desitnation[ship.id])
         claim_location(move)
         return move
 
-    def find_safe_directions():
+    def find_safe_directions(ship):
         if ship_status[ship.id] == 'exploring':
             directions = [Direction.North, Direction.South, Direction.East, Direction.West, DIRECTION_STAY]
         else:
@@ -164,7 +164,7 @@ while True:
         game_map[ship.position.directional_offset(move)].mark_unsafe(ship)
 
     def smart_navigate(ship, destination):
-        safe_directions = find_safe_directions()
+        safe_directions = find_safe_directions(ship)
         if len(safe_directions) == 0:
             return DIRECTION_STAY
 
