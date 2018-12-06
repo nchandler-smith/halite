@@ -103,6 +103,7 @@ while True:
     def ship_at_shipyard_goes_hella_halite(ship):
         if ship.position == me.shipyard.position or ship.id not in ship_status:
             ship_status[ship.id] = 'heading_hella_halite'
+            ship_desitnation[ship.id] = get_position_most_halite()
 
 
     def get_move_exploring(ship):
