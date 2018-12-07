@@ -49,11 +49,14 @@ def get_total_halite(game_map):
             total_halite += game_map[(position)].halite_amount
     return total_halite
 
+
 total_halite = get_total_halite(game.game_map)
 number_of_players = len(list(game.players.keys()))
 REVENUE_EXPECTATION = 5000
-SHIP_LIMIT = total_halite / (number_of_players * REVENUE_EXPECTATION)
-SPAWN_TURN_LIMIT = 175
+SHIP_UPPER_LIMIT = total_halite / (number_of_players * REVENUE_EXPECTATION)
+SHIP_LOWER_LIMIT = 5
+SPAWN_TURN_LIMIT = 250
+NUMBER_OF_TURNS_SUPPRESS_ALL_SPAWNS = 20
 HARVEST_HALITE_LOWER_LIMIT = 10
 DIRECTION_STAY = (0,0)
 ROLLUP_TURN_BUFFER = 7
@@ -84,10 +87,11 @@ while True:
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
     my_number_ships = len(me.get_ships())
-    if (my_number_ships < SHIP_LIMIT) \
-    and game.turn_number <= SPAWN_TURN_LIMIT \
+    if my_number_ships < SHIP_UPPER_LIMIT \
+    and (game.turn_number <= SPAWN_TURN_LIMIT or my_number_ships < SHIP_LOWER_LIMIT) \
     and me.halite_amount >= constants.SHIP_COST \
-    and not game_map[me.shipyard].is_occupied:
+    and not game_map[me.shipyard].is_occupied\
+    and game.turn_number < constants.MAX_TURNS - NUMBER_OF_TURNS_SUPPRESS_ALL_SPAWNS:
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.
