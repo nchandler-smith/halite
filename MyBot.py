@@ -37,11 +37,26 @@ game.ready("LikeABotOutOfHalite")
 logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
-SHIP_LOWER_LIMIT = 5
+
+
+def get_total_halite(game_map):
+    game_height = game_map.height
+    game_width = game_map.width
+    total_halite = 0
+    for x_pos in range(game_width):
+        for y_pos in range(game_height):
+            position = Position(x_pos, y_pos)
+            total_halite += game_map[(position)].halite_amount
+    return total_halite
+
+total_halite = get_total_halite(game.game_map)
+number_of_players = len(list(game.players.keys()))
+REVENUE_EXPECTATION = 5000
+SHIP_LIMIT = total_halite / (number_of_players * REVENUE_EXPECTATION)
 SPAWN_TURN_LIMIT = 175
 HARVEST_HALITE_LOWER_LIMIT = 10
 DIRECTION_STAY = (0,0)
-ROLLUP_TURN_BUFFER = 5
+ROLLUP_TURN_BUFFER = 7
 
 ship_status = {}
 ship_destination = {}  # used for going to regions of most halite
@@ -68,7 +83,9 @@ while True:
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if (game.turn_number <= SPAWN_TURN_LIMIT or len(me.get_ships()) < SHIP_LOWER_LIMIT) \
+    my_number_ships = len(me.get_ships())
+    if (my_number_ships < SHIP_LIMIT) \
+    and game.turn_number <= SPAWN_TURN_LIMIT \
     and me.halite_amount >= constants.SHIP_COST \
     and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
@@ -211,7 +228,7 @@ while True:
 
     def check_rollup(ship):
         number_of_turns_to_return_to_shipyard = game_map.calculate_distance(ship.position, me.shipyard.position)
-        if (constants.MAX_TURNS - game.turn_number - number_of_turns_to_return_to_shipyard <= ROLLUP_TURN_BUFFER):
+        if constants.MAX_TURNS - game.turn_number - number_of_turns_to_return_to_shipyard <= ROLLUP_TURN_BUFFER:
             ship_status[ship.id] = 'rollup'
             ship_destination[ship.id] = me.shipyard.position
 
