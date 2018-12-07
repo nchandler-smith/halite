@@ -52,8 +52,8 @@ def get_total_halite(game_map):
 
 total_halite = get_total_halite(game.game_map)
 number_of_players = len(list(game.players.keys()))
-REVENUE_EXPECTATION = 4000
-SHIP_UPPER_LIMIT = total_halite / (number_of_players * REVENUE_EXPECTATION)
+REVENUE_EXPECTATION = 8000
+SHIP_UPPER_LIMIT = total_halite / REVENUE_EXPECTATION
 SHIP_LOWER_LIMIT = 5
 SPAWN_TURN_LIMIT = 250
 NUMBER_OF_TURNS_SUPPRESS_ALL_SPAWNS = 20
