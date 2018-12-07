@@ -26,6 +26,7 @@ import logging
 
 # This game object contains the initial game state.
 game = Game()
+
 # At this point "game" variable is populated with initial map data.
 # This is a good place to do computationally expensive start-up pre-processing.
 # As soon as you call "ready" function below, the 2 second per turn timer will start.
@@ -40,9 +41,10 @@ SHIP_LOWER_LIMIT = 5
 SPAWN_TURN_LIMIT = 175
 HARVEST_HALITE_LOWER_LIMIT = 10
 DIRECTION_STAY = (0,0)
+ROLLUP_TURN_BUFFER = 5
 
 ship_status = {}
-ship_desitnation = {}  # used for going to regions of most halite
+ship_destination = {}  # used for going to regions of most halite
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
@@ -79,6 +81,7 @@ while True:
 
         ship_at_shipyard_goes_hella_halite(ship)
         validate_heading_hella_halite_status(ship)
+        check_rollup(ship)
 
         if ship_status[ship.id] == 'exploring':
             move = get_move_exploring(ship)
@@ -88,22 +91,25 @@ while True:
 
         if ship.is_full or ship_status[ship.id] == 'returning':
             move = get_move_returning_ship(ship)
+            
+        if ship_status[ship.id] == 'rollup':
+            move = get_move_rollup()
 
         return move
 
 
     def validate_heading_hella_halite_status(ship):
         if ship_status[ship.id] == 'heading_hella_halite':
-            if ship_desitnation.get(ship.id) is None:
-                ship_desitnation[ship.id] = get_position_most_halite()
-            if game_map.calculate_distance(ship.position, ship_desitnation[ship.id]) <= 1:
+            if ship_destination.get(ship.id) is None:
+                ship_destination[ship.id] = get_position_most_halite()
+            if game_map.calculate_distance(ship.position, ship_destination[ship.id]) <= 1:
                 ship_status[ship.id] = 'exploring'
 
 
     def ship_at_shipyard_goes_hella_halite(ship):
         if ship.position == me.shipyard.position or ship.id not in ship_status:
             ship_status[ship.id] = 'heading_hella_halite'
-            ship_desitnation[ship.id] = get_position_most_halite()
+            ship_destination[ship.id] = get_position_most_halite()
 
 
     def get_move_exploring(ship):
@@ -122,9 +128,16 @@ while True:
 
     def get_move_hella_halite(ship):
         ship_status[ship.id] = 'heading_hella_halite'
-        move = smart_navigate(ship, ship_desitnation[ship.id])
+        move = smart_navigate(ship, ship_destination[ship.id])
         claim_location(move)
         return move
+
+
+    def get_move_rollup():
+        ship_status[ship.id] = 'rollup'
+        move = smart_navigate(ship, ship_destination[ship.id])
+        return move
+
 
     def find_safe_directions(ship):
         if ship_status[ship.id] == 'exploring':
@@ -195,6 +208,12 @@ while True:
                     most_halite_at_a_position = test_position_halite_amount
                     position_most_halite =test_position
         return position_most_halite
+
+    def check_rollup(ship):
+        number_of_turns_to_return_to_shipyard = game_map.calculate_distance(ship.position, me.shipyard.position)
+        if (constants.MAX_TURNS - game.turn_number - number_of_turns_to_return_to_shipyard <= ROLLUP_TURN_BUFFER):
+            ship_status[ship.id] = 'rollup'
+            ship_destination[ship.id] = me.shipyard.position
 
     # def map_halite():
     #     game_height = game_map.height
