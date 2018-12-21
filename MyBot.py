@@ -79,10 +79,13 @@ while True:
         # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
         #   Else, collect halite.
         move = determine_move(ship)
-        if game_map[ship.position].halite_amount < constants.MAX_HALITE / 10 or ship.is_full:
-            command_queue.append(ship.move(move))
-        else:
-            command_queue.append(ship.stay_still())
+
+        # if game_map[ship.position].halite_amount < constants.MAX_HALITE / 10 or ship.is_full:
+        #     command_queue.append(ship.move(move))
+        # else:
+        #     command_queue.append(ship.stay_still())
+
+        command_queue.append(ship.move(move))
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
