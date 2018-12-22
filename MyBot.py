@@ -22,6 +22,8 @@ import random
 #   (print statements) are reserved for the engine-bot communication.
 import logging
 
+from itertools import groupby
+
 """ <<<Game Begin>>> """
 
 # This game object contains the initial game state.
@@ -37,7 +39,7 @@ class Admiral:
     def __init__(self):
         self.command_queue = []
 
-    def command_moves(self, ships, moves):
+    def command_safe_moves(self, ships, moves):
         self.command_queue = []
 
         # A better way to do this is to generate a list of positions that correspond to the locations the ships will move to
@@ -46,6 +48,13 @@ class Admiral:
         for ship, move in zip(ships, moves):
             new_position = ship.position.directional_offset(move)
             occupied_locations[ship] = new_position
+
+        # Look for collisions by looking for duplicates in position list
+        # THIS WILL NOT WORK!!! LIKELY GOING TO NEED TO DO INDIVIDUAL COMKPARISONS!!!
+        new_locations = list(occupied_locations.values())
+        new_locations_no_dupes = [k for k, v in groupby(sorted(new_locations))]
+        if len(new_locations) != len(new_locations_no_dupes):
+            pass # avoid collision logic goes here
 
         for ship, move in zip(ships, moves):
             self.command_queue.append(ship.move(move))
@@ -98,14 +107,14 @@ while True:
     game_map = game.game_map
 
     claimed_locations = {}
-    moves_list = []
+    moves = []
 
     for ship in me.get_ships():
 
         move = determine_move(ship)
-        moves_list.append(move)
+        moves.append(move)
 
-    command_queue = admiral.command_moves(list(me.get_ships()), moves_list)
+    command_queue = admiral.command_safe_moves(list(me.get_ships()), moves)
 
     # command_queue.append(ship.move(move))
 
