@@ -30,6 +30,21 @@ game = Game()
 # At this point "game" variable is populated with initial map data.
 # This is a good place to do computationally expensive start-up pre-processing.
 # As soon as you call "ready" function below, the 2 second per turn timer will start.
+
+class Admiral:
+
+    def __init__(self):
+        self.command_queue = []
+
+    def command_moves(self, ships, moves):
+        self.command_queue = []
+        for ship, move in zip(ships, moves):
+            self.command_queue.append(ship.move(move))
+        return self.command_queue
+
+
+admiral = Admiral()
+
 game.ready("LikeABotOutOfHalite")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
@@ -61,6 +76,9 @@ HARVEST_HALITE_LOWER_LIMIT = 10
 DIRECTION_STAY = (0,0)
 ROLLUP_TURN_BUFFER = 7
 
+# A command queue holds all the commands you will run this turn. You build this list up and submit it at the
+#   end of the turn.
+command_queue = []
 ship_status = {}
 ship_destination = {}  # used for going to regions of most halite
 while True:
@@ -71,15 +89,17 @@ while True:
     me = game.me
     game_map = game.game_map
 
-    # A command queue holds all the commands you will run this turn. You build this list up and submit it at the
-    #   end of the turn.
-    command_queue = []
     claimed_locations = {}
+    moves_list = []
 
     for ship in me.get_ships():
 
         move = determine_move(ship)
-        command_queue.append(ship.move(move))
+        moves_list.append(move)
+
+    command_queue = admiral.command_moves(me.get_ships(), moves_list)
+
+    # command_queue.append(ship.move(move))
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
