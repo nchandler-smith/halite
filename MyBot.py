@@ -129,8 +129,8 @@ while True:
         validate_heading_hella_halite_status(ship)
         check_rollup(ship)
 
-        if ship_status[ship.id] == 'exploring':
-            move = get_move_exploring(ship)
+        if ship_status[ship.id] == 'harvesting':
+            move = get_move_harvesting(ship)
 
         if ship_status[ship.id] == 'heading_hella_halite':
             move = get_move_hella_halite(ship)
@@ -149,7 +149,7 @@ while True:
             if ship_destination.get(ship.id) is None:
                 ship_destination[ship.id] = get_position_most_halite()
             if game_map.calculate_distance(ship.position, ship_destination[ship.id]) <= 1:
-                ship_status[ship.id] = 'exploring'
+                ship_status[ship.id] = 'harvesting'
 
 
     def ship_at_shipyard_goes_hella_halite(ship):
@@ -158,8 +158,8 @@ while True:
             ship_destination[ship.id] = get_position_most_halite()
 
 
-    def get_move_exploring(ship):
-        ship_status[ship.id] = 'exploring'
+    def get_move_harvesting(ship):
+        ship_status[ship.id] = 'harvesting'
         directions = find_safe_directions(ship)
         move = find_direction_most_halite(directions)
         claim_location(move)
@@ -186,7 +186,7 @@ while True:
 
 
     def find_safe_directions(ship):
-        if ship_status[ship.id] == 'exploring':
+        if ship_status[ship.id] == 'harvesting':
             directions = [Direction.North, Direction.South, Direction.East, Direction.West, DIRECTION_STAY]
         else:
             directions = [Direction.North, Direction.South, Direction.East, Direction.West]
