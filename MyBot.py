@@ -31,6 +31,7 @@ game = Game()
 # This is a good place to do computationally expensive start-up pre-processing.
 # As soon as you call "ready" function below, the 2 second per turn timer will start.
 
+
 class Admiral:
 
     def __init__(self):
@@ -38,10 +39,17 @@ class Admiral:
 
     def command_moves(self, ships, moves):
         self.command_queue = []
+
+        # A better way to do this is to generate a list of positions that correspond to the locations the ships will move to
+        # Verify that locations in the list are unique
+        occupied_locations = {}
+        for ship, move in zip(ships, moves):
+            new_position = ship.position.directional_offset(move)
+            occupied_locations[ship] = new_position
+
         for ship, move in zip(ships, moves):
             self.command_queue.append(ship.move(move))
         return self.command_queue
-
 
 admiral = Admiral()
 
@@ -97,7 +105,7 @@ while True:
         move = determine_move(ship)
         moves_list.append(move)
 
-    command_queue = admiral.command_moves(me.get_ships(), moves_list)
+    command_queue = admiral.command_moves(list(me.get_ships()), moves_list)
 
     # command_queue.append(ship.move(move))
 
