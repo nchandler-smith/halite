@@ -22,6 +22,8 @@ import random
 #   (print statements) are reserved for the engine-bot communication.
 import logging
 
+import itertools
+
 from itertools import groupby
 
 """ <<<Game Begin>>> """
@@ -52,13 +54,20 @@ class Admiral:
         # Look for collisions by looking for duplicates in position list
         # THIS WILL NOT WORK!!! LIKELY GOING TO NEED TO DO INDIVIDUAL COMKPARISONS!!!
         new_locations = list(occupied_locations.values())
-        new_locations_no_dupes = [k for k, v in groupby(sorted(new_locations))]
-        if len(new_locations) != len(new_locations_no_dupes):
+        if self.check_list_contains_duplicates(new_locations):
             pass # avoid collision logic goes here
 
         for ship, move in zip(ships, moves):
             self.command_queue.append(ship.move(move))
         return self.command_queue
+
+    def check_list_contains_duplicates(self, list_in):
+        list_copy = list_in.copy()
+        while len(list_copy) > 1:
+            if list_copy.pop() in list_copy:
+                return True
+        return False
+
 
 admiral = Admiral()
 
