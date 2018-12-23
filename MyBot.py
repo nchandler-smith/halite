@@ -72,6 +72,20 @@ class Admiral:
                 return True
         return False
 
+    def get_collision_info(self):
+        ships_collision_imminent = []
+        locations_collision_imminent = []
+        next_locations = list(self.proposed_next_positions.values())
+        while len(next_locations) > 1:
+            test_location = next_locations.pop()
+            if test_location in next_locations and test_location not in locations_collision_imminent:
+                locations_collision_imminent.append(test_location)
+                for ship in self.proposed_next_positions.keys():
+                    if self.proposed_next_positions[ship] == test_location:
+                        ships_collision_imminent.append(ship)
+
+
+
 
 admiral = Admiral()
 
