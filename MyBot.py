@@ -54,29 +54,23 @@ class Admiral:
             next_positions = ship.position.directional_offset(move)
             self.proposed_next_positions[ship] = next_positions
 
-        new_locations = list(self.proposed_next_positions.values())
-        if self.check_list_contains_duplicates(new_locations):
+        if self.is_collision_imminent():
             # avoid collision logic goes here
             # check for collisions using similar
             # logic to the contains duplicates function
             # use a dict with ships and positions to get the ships
             pass
 
-
         for ship, move in zip(self.ships, self.moves):
             self.command_queue.append(ship.move(move))
         return self.command_queue
 
-    def check_list_contains_duplicates(self, list_in):
-        list_copy = list_in.copy()
-        while len(list_copy) > 1:
-            if list_copy.pop() in list_copy:
+    def is_collision_imminent(self):
+        next_locations = list(self.proposed_next_positions.values())
+        while len(next_locations) > 1:
+            if next_locations.pop() in next_locations:
                 return True
         return False
-
-    def get_imminent_collisions(self):
-        pass
-
 
 
 admiral = Admiral()
