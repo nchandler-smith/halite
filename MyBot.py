@@ -39,25 +39,31 @@ game = Game()
 class Admiral:
 
     def __init__(self):
-        self.command_queue = []
+        self.command_queue = None
+        self.ships = None
+        self.moves = None
+        self.proposed_next_positions = None
 
     def command_safe_moves(self, ships, moves):
         self.command_queue = []
+        self.ships = ships
+        self.moves = moves
 
-        # A better way to do this is to generate a list of positions that correspond to the locations the ships will move to
-        # Verify that locations in the list are unique
-        occupied_locations = {}
-        for ship, move in zip(ships, moves):
-            new_position = ship.position.directional_offset(move)
-            occupied_locations[ship] = new_position
+        self.proposed_next_positions = {}
+        for ship, move in zip(self.ships, self.moves):
+            next_positions = ship.position.directional_offset(move)
+            self.proposed_next_positions[ship] = next_positions
 
-        # Look for collisions by looking for duplicates in position list
-        # THIS WILL NOT WORK!!! LIKELY GOING TO NEED TO DO INDIVIDUAL COMKPARISONS!!!
-        new_locations = list(occupied_locations.values())
+        new_locations = list(self.proposed_next_positions.values())
         if self.check_list_contains_duplicates(new_locations):
-            pass # avoid collision logic goes here
+            # avoid collision logic goes here
+            # check for collisions using similar
+            # logic to the contains duplicates function
+            # use a dict with ships and positions to get the ships
+            pass
 
-        for ship, move in zip(ships, moves):
+
+        for ship, move in zip(self.ships, self.moves):
             self.command_queue.append(ship.move(move))
         return self.command_queue
 
@@ -67,6 +73,10 @@ class Admiral:
             if list_copy.pop() in list_copy:
                 return True
         return False
+
+    def get_imminent_collisions(self):
+        pass
+
 
 
 admiral = Admiral()
