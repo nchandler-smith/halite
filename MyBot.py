@@ -107,15 +107,12 @@ class Admiral:
             self.set_position_occupied_next_turn(ship, Direction.Still)
 
     def reroute_ships_to_avoid_collisions(self):
-        for ship, move in zip(self.ships, self.moves):
+        for ship in self.ships_collision_imminent:
             self.set_direction_next_turn(ship, Direction.Still)
+
             if self.ship_next_position[ship.id] in self.locations_collision_imminent:
-                if move == Direction.Still:
-                    break
-
-                elif ship_status[ship.id] == 'harvesting':
+                if ship_status[ship.id] == 'harvesting':
                     self.harvesting_go_safe_position(ship)
-
                 elif ship_status[ship.id] == 'returning':
                     self.returning_go_safe_position(ship, me.shipyard.position)
                 else:
