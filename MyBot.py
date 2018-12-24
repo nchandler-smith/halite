@@ -118,7 +118,6 @@ class Admiral:
 
                 elif ship_status[ship.id] == 'returning':
                     self.returning_go_safe_position(ship, me.shipyard.position)
-
                 else:
                     break
 
@@ -273,9 +272,6 @@ while True:
         return test_halite_amount
 
     def smart_navigate(ship, destination, directions=None):
-        # safe_directions = find_safe_directions(ship)
-        # if len(safe_directions) == 0:
-        #     return Direction.Still
         if directions is None:
             directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
         min_distance = 1000
