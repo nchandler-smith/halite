@@ -132,8 +132,8 @@ class Admiral:
             try_directions.remove(go_direction)
             self.harvesting_go_safe_position(ship, try_directions)
         else:
-            self.ship_next_direction(ship, go_direction)
-            self.ship_next_position(ship, go_direction)
+            self.set_direction_next_turn(ship, go_direction)
+            self.set_position_occupied_next_turn(ship, go_direction)
 
     def returning_go_safe_position(self, ship, destination, try_directions=None):
         if try_directions is None:
@@ -143,8 +143,8 @@ class Admiral:
                 try_directions.remove(go_direction)
                 self.returning_go_safe_position(ship, try_directions)
             else:
-                self.ship_next_direction(ship, go_direction)
-                self.ship_next_position(ship, go_direction)
+                self.set_direction_next_turn(ship, go_direction)
+                self.set_position_occupied_next_turn(ship, go_direction)
 
 
 admiral = Admiral()
