@@ -42,7 +42,8 @@ class Admiral:
         self.command_queue = None
         self.ships = None
         self.moves = None
-        self.proposed_next_positions = None
+        self.ship_next_position = None
+        self.ship_next_direction = None
         self.ships_collision_imminent = None
         self.locations_collision_imminent = None
 
@@ -50,13 +51,15 @@ class Admiral:
         self.command_queue = []
         self.ships = ships
         self.moves = moves
-        self.proposed_next_positions = {}
+        self.ship_next_position = {}
+        self.ship_next_direction = {}
         self.ships_collision_imminent = []
         self.locations_collision_imminent = []
 
         for ship, move in zip(self.ships, self.moves):
             next_position = ship.position.directional_offset(move)
-            self.proposed_next_positions[ship] = next_position
+            self.ship_next_position[ship.id] = next_position
+            self.ship_next_direction[ship.id] = move
 
         if self.is_collision_imminent():
             # avoid collision logic goes here
@@ -68,15 +71,15 @@ class Admiral:
             self.get_collision_info()
             self.reroute_ships_to_avoid_collisions()
 
-        for ship, move in zip(self.ships, self.moves):
-            self.command_queue.append(ship.move(move))
+        for ship in self.ships:
+            self.command_queue.append(ship.move(self.ship_next_direction[ship.id]))
         return self.command_queue
 
     def get_positions_occupied_next_turn(self):
-        return list(self.proposed_next_positions.values())
+        return list(self.ship_next_position.values())
 
     def is_collision_imminent(self):
-        next_locations = list(self.proposed_next_positions.values())
+        next_locations = list(self.ship_next_position.values())
         while len(next_locations) > 1:
             if next_locations.pop() in next_locations:
                 return True
@@ -85,28 +88,32 @@ class Admiral:
     def get_collision_info(self):
         self.ships_collision_imminent = []
         self.locations_collision_imminent = []
-        next_locations = list(self.proposed_next_positions.values())
+        next_locations = list(self.ship_next_position.values())
         while len(next_locations) > 1:
             test_location = next_locations.pop()
             if test_location in next_locations and test_location not in self.locations_collision_imminent:
                 self.locations_collision_imminent.append(test_location)
-                for ship in self.proposed_next_positions.keys():
-                    if self.proposed_next_positions[ship] == test_location:
+                for ship in self.ships:
+                    if self.ship_next_position[ship.id] == test_location:
                         self.ships_collision_imminent.append(ship) # Do i need to protect against dupes? Use set?
 
     def reroute_ships_to_avoid_collisions(self):
         for ship, move in zip(self.ships, self.moves):
-            if self.proposed_next_positions[ship] in self.locations_collision_imminent:
+            if self.ship_next_position[ship.id] in self.locations_collision_imminent:
                 if move == Direction.Still:
                     break
                 elif ship_status[ship.id] == 'harvesting':
-                    self.harvesting_go_safe_position(ship, self.get_positions_occupied_next_turn())
+                    #self.harvesting_go_safe_position(ship, self.get_positions_occupied_next_turn())
+                    self.ship_next_direction[ship.id] = Direction.Still
                 elif ship_status[ship.id] == 'heading_hella_halite':
-                    self.heading_hella_halite_go_safe_position()
+                    # self.heading_hella_halite_go_safe_position()
+                    self.ship_next_direction[ship.id] = Direction.Still
                 elif ship_status[ship.id] == 'returning':
-                    self.returning_go_safe_position()
+                    # self.returning_go_safe_position()
+                    self.ship_next_direction[ship.id] = Direction.Still
                 elif ship_status[ship.id] == 'rollup':
-                    self.rollup_go_safe_position()
+                    # self.rollup_go_safe_position()
+                    self.ship_next_direction[ship.id] = Direction.Still
                 else:
                     break
 
@@ -162,7 +169,12 @@ class Admiral:
                 best_direction = direction
             if distance == min_distance:
                 best_direction = random.choice([direction, best_direction])
-        return best_direction
+        position_next_turn = ship.position.directional_offset(best_direction)
+        if position_next_turn in self.get_positions_occupied_next_turn():
+            try_directions.remove(position_next_turn)
+            self.safe_navigate(ship, destination, try_directions)
+        self.ship_next_direction[ship.id] = best_direction
+
 
 
 admiral = Admiral()
