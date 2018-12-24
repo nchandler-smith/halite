@@ -51,6 +51,8 @@ class Admiral:
         self.ships = ships
         self.moves = moves
         self.proposed_next_positions = {}
+        self.ships_collision_imminent = []
+        self.locations_collision_imminent = []
 
         for ship, move in zip(self.ships, self.moves):
             next_position = ship.position.directional_offset(move)
@@ -69,6 +71,9 @@ class Admiral:
         for ship, move in zip(self.ships, self.moves):
             self.command_queue.append(ship.move(move))
         return self.command_queue
+
+    def get_positions_occupied_next_turn(self):
+        return list(self.proposed_next_positions.values())
 
     def is_collision_imminent(self):
         next_locations = list(self.proposed_next_positions.values())
@@ -95,7 +100,7 @@ class Admiral:
                 if move == Direction.Still:
                     break
                 elif ship_status[ship.id] == 'harvesting':
-                    self.harvesting_go_safe_position()
+                    self.harvesting_go_safe_position(ship, self.get_positions_occupied_next_turn())
                 elif ship_status[ship.id] == 'heading_hella_halite':
                     self.heading_hella_halite_go_safe_position()
                 elif ship_status[ship.id] == 'returning':
@@ -105,15 +110,15 @@ class Admiral:
                 else:
                     break
 
-    def harvesting_go_safe_position(self, ship, claimed_positions, try_directions=None):
+    def harvesting_go_safe_position(self, ship, occupied_positions_next_turn, try_directions=None):
         if try_directions is None:
-            try_directions = ship.position.get_surrounding_cardinals()
+            try_directions = [Direction.North, Direction.South, Direction.East, Direction.West]
         if len(try_directions) == 0 or get_halite_in_direction(Direction.Still) >= HARVEST_HALITE_LOWER_LIMIT:
             return Direction.Still
         go_direction =  self.get_direction_most_near_halite(try_directions)
-        if ship.position.directional_offset(go_direction) in claimed_positions:
+        if ship.position.directional_offset(go_direction) in occupied_positions_next_turn:
             try_directions.remove(go_direction)
-            self.harvesting_go_safe_position(ship, claimed_positions, try_directions)
+            self.harvesting_go_safe_position(ship, occupied_positions_next_turn, try_directions)
         return go_direction
 
     def get_direction_most_near_halite(self, directions):
@@ -132,13 +137,32 @@ class Admiral:
             return random.choice(directions)
 
     def heading_hella_halite_go_safe_position(self):
-        pass
+        move = self.safe_navigate(ship, ship_destination[ship.id])
+        return move
 
     def returning_go_safe_psition(self):
         pass
 
     def rollup_go_safe_position(self):
         pass
+
+    def safe_navigate(self, ship, destination, try_directions=None):
+        if try_directions is None:
+            try_directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
+        if len(try_directions) == 0 or get_halite_in_direction(Direction.Still) >= HARVEST_HALITE_LOWER_LIMIT:
+            return Direction.Still
+
+        min_distance = 1000
+        best_direction = random.choice(try_directions)
+        for direction in try_directions:
+            test_location = ship.position.directional_offset(direction)
+            distance = game_map.calculate_distance(test_location, destination)
+            if distance < min_distance:
+                min_distance = distance
+                best_direction = direction
+            if distance == min_distance:
+                best_direction = random.choice([direction, best_direction])
+        return best_direction
 
 
 admiral = Admiral()
@@ -186,7 +210,6 @@ while True:
     me = game.me
     game_map = game.game_map
 
-    claimed_locations = {}
     moves = []
 
     for ship in me.get_ships():
@@ -279,13 +302,13 @@ while True:
             directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
         else:
             directions = [Direction.North, Direction.South, Direction.East, Direction.West]
-        safe_directions = []
-        for direction in directions:
-            test_location = ship.position.directional_offset(direction)
-            if not game_map[test_location].is_occupied and test_location not in list(claimed_locations.values()):
-                safe_directions.append(direction)
-        # return safe_directions
-        # return all directions to test admiral
+        # safe_directions = []
+        # for direction in directions:
+        #     test_location = ship.position.directional_offset(direction)
+        #     if not game_map[test_location].is_occupied and test_location not in list(claimed_locations.values()):
+        #         safe_directions.append(direction)
+        # # return safe_directions
+        # # return all directions to test admiral
         return directions
 
     def find_direction_most_halite(directions):
@@ -312,8 +335,9 @@ while True:
 
 
     def claim_location(move):
-        claimed_locations[ship.id] = ship.position.directional_offset(move)
-        game_map[ship.position.directional_offset(move)].mark_unsafe(ship)
+        # claimed_locations[ship.id] = ship.position.directional_offset(move)
+        # game_map[ship.position.directional_offset(move)].mark_unsafe(ship)
+        pass
 
     def smart_navigate(ship, destination):
         safe_directions = find_safe_directions(ship)

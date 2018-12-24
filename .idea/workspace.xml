@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8dd86b1e-a86e-4632-a9a8-1ec7aae8c870" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/MyBot.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,11 +15,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
-              <caret line="112" column="29" selection-end-line="363" />
+            <state relative-caret-position="392">
+              <caret line="146" column="12" lean-forward="true" selection-start-line="146" selection-start-column="12" selection-end-line="146" selection-end-column="12" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/hlt/positionals.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-551">
+              <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -46,6 +54,9 @@
       <find>list_copy</find>
       <find>get_collision_info</find>
       <find>DIRECTION</find>
+      <find>claimed_locations</find>
+      <find>claimed</find>
+      <find>get_positions_occupied_next_turn</find>
     </findStrings>
     <replaceStrings>
       <replace>gatherong</replace>
@@ -135,22 +146,22 @@
       <workItem from="1544152894197" duration="315000" />
       <workItem from="1545434412949" duration="5590000" />
       <workItem from="1545482461771" duration="4313000" />
-      <workItem from="1545516233961" duration="19634000" />
+      <workItem from="1545516233961" duration="22770000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="85581000" />
+    <option name="totallyTimeSpent" value="88717000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1200" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15228967" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15228967" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.17079645" />
+      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.17079645" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -160,7 +171,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32959184" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.2460177" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.0" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -207,22 +218,22 @@
     <entry file="file://$PROJECT_DIR$/Admiral.py" />
     <entry file="file://$PROJECT_DIR$/hlt/entity.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
+        <state relative-caret-position="554">
           <caret line="57" column="8" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/hlt/positionals.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-820">
+        <state relative-caret-position="-551">
           <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="112" column="29" selection-end-line="363" />
+        <state relative-caret-position="392">
+          <caret line="146" column="12" lean-forward="true" selection-start-line="146" selection-start-column="12" selection-end-line="146" selection-end-column="12" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>
