@@ -117,7 +117,7 @@ class Admiral:
                     self.harvesting_go_safe_position(ship)
 
                 elif ship_status[ship.id] == 'returning':
-                    self.returning_go_safe_position()
+                    self.returning_go_safe_position(ship, me.shipyard.position)
 
                 else:
                     break
@@ -135,30 +135,16 @@ class Admiral:
             self.ship_next_direction(ship, go_direction)
             self.ship_next_position(ship, go_direction)
 
-    def returning_go_safe_position(self):
-        pass
-
-    def safe_navigate(self, ship, destination, try_directions=None):
+    def returning_go_safe_position(self, ship, destination, try_directions=None):
         if try_directions is None:
             try_directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
-        if len(try_directions) == 0:
-            return Direction.Still
-
-        min_distance = 1000
-        best_direction = random.choice(try_directions)
-        for direction in try_directions:
-            test_location = ship.position.directional_offset(direction)
-            distance = game_map.calculate_distance(test_location, destination)
-            if distance < min_distance:
-                min_distance = distance
-                best_direction = direction
-            if distance == min_distance:
-                best_direction = random.choice([direction, best_direction])
-        position_next_turn = ship.position.directional_offset(best_direction)
-        if position_next_turn in self.get_positions_occupied_next_turn():
-            try_directions.remove(position_next_turn)
-            self.safe_navigate(ship, destination, try_directions)
-        self.ship_next_direction[ship.id] = best_direction
+            go_direction = smart_navigate(ship, destination, try_directions)
+            if ship.position.directional_offset(go_direction) in self.get_positions_occupied_next_turn():
+                try_directions.remove(go_direction)
+                self.returning_go_safe_position(ship, try_directions)
+            else:
+                self.ship_next_direction(ship, go_direction)
+                self.ship_next_position(ship, go_direction)
 
 
 admiral = Admiral()
@@ -282,11 +268,12 @@ while True:
         test_halite_amount = game_map[test_location].halite_amount
         return test_halite_amount
 
-    def smart_navigate(ship, destination):
+    def smart_navigate(ship, destination, directions=None):
         # safe_directions = find_safe_directions(ship)
         # if len(safe_directions) == 0:
         #     return Direction.Still
-        directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
+        if directions is None:
+            directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
         min_distance = 1000
         best_direction = random.choice(directions)
         for direction in directions:
