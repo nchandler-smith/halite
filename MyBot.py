@@ -127,7 +127,9 @@ class Admiral:
             try_directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
         if len(try_directions) == 0 or get_halite_in_direction(Direction.Still) >= HARVEST_HALITE_LOWER_LIMIT:
             return Direction.Still
+
         go_direction = find_safe_direction_most_halite(try_directions)
+
         if ship.position.directional_offset(go_direction) in self.get_positions_occupied_next_turn():
             try_directions.remove(go_direction)
             self.harvesting_go_safe_position(ship, try_directions)
@@ -138,13 +140,15 @@ class Admiral:
     def returning_go_safe_position(self, ship, destination, try_directions=None):
         if try_directions is None:
             try_directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
-            go_direction = smart_navigate(ship, destination, try_directions)
-            if ship.position.directional_offset(go_direction) in self.get_positions_occupied_next_turn():
-                try_directions.remove(go_direction)
-                self.returning_go_safe_position(ship, destination, try_directions)
-            else:
-                self.set_direction_next_turn(ship, go_direction)
-                self.set_position_occupied_next_turn(ship, go_direction)
+
+        go_direction = smart_navigate(ship, destination, try_directions)
+
+        if ship.position.directional_offset(go_direction) in self.get_positions_occupied_next_turn():
+            try_directions.remove(go_direction)
+            self.returning_go_safe_position(ship, destination, try_directions)
+        else:
+            self.set_direction_next_turn(ship, go_direction)
+            self.set_position_occupied_next_turn(ship, go_direction)
 
 
 admiral = Admiral()
