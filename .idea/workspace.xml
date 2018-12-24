@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="816">
-              <caret line="149" column="51" selection-start-line="149" selection-start-column="51" selection-end-line="149" selection-end-column="51" />
+            <state relative-caret-position="1333">
+              <caret line="136" column="51" selection-end-line="410" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
@@ -66,6 +66,7 @@
       <find>claimed_locations</find>
       <find>claimed</find>
       <find>get_positions_occupied_next_turn</find>
+      <find>occupied_positions_next_turn</find>
     </findStrings>
     <replaceStrings>
       <replace>gatherong</replace>
@@ -155,12 +156,12 @@
       <workItem from="1544152894197" duration="315000" />
       <workItem from="1545434412949" duration="5590000" />
       <workItem from="1545482461771" duration="4313000" />
-      <workItem from="1545516233961" duration="25653000" />
+      <workItem from="1545516233961" duration="26642000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="91600000" />
+    <option name="totallyTimeSpent" value="92589000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1200" extended-state="0" />
@@ -170,7 +171,7 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.17079645" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.17079645" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -180,7 +181,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32959184" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.32920355" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32920355" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -248,8 +249,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="149" column="51" selection-start-line="149" selection-start-column="51" selection-end-line="149" selection-end-column="51" />
+        <state relative-caret-position="1333">
+          <caret line="136" column="51" selection-end-line="410" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>

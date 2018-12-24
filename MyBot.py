@@ -78,6 +78,12 @@ class Admiral:
     def get_positions_occupied_next_turn(self):
         return list(self.ship_next_position.values())
 
+    def set_position_occupied_next_turn(self, ship, move):
+        self.ship_next_position[ship.id] = ship.position.directional_offset(move)
+
+    def set_direction_next_turn(self, ship, move):
+        self.ship_next_direction[ship.id] = move
+
     def is_collision_imminent(self):
         next_locations = list(self.ship_next_position.values())
         while len(next_locations) > 1:
@@ -106,7 +112,7 @@ class Admiral:
                 elif ship_status[ship.id] == 'harvesting':
                     self.harvesting_go_safe_position(ship, self.get_positions_occupied_next_turn())
 
-                elif ship_status[ship.id] == 'heading_hella_halite':
+                elif ship_status[ship.id] == 'heading_hella_halite':  # heading_hella_halite is turned off
                     self.heading_hella_halite_go_safe_position(ship, ship_destination[ship.id])
 
                 elif ship_status[ship.id] == 'returning':
@@ -120,16 +126,18 @@ class Admiral:
                 else:
                     break
 
-    def harvesting_go_safe_position(self, ship, occupied_positions_next_turn, try_directions=None):
+    def harvesting_go_safe_position(self, ship, try_directions=None):
         if try_directions is None:
-            try_directions = [Direction.North, Direction.South, Direction.East, Direction.West]
+            try_directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
         if len(try_directions) == 0 or get_halite_in_direction(Direction.Still) >= HARVEST_HALITE_LOWER_LIMIT:
             return Direction.Still
         go_direction =  self.get_direction_most_near_halite(try_directions)
-        if ship.position.directional_offset(go_direction) in occupied_positions_next_turn:
+        if ship.position.directional_offset(go_direction) in self.get_positions_occupied_next_turn():
             try_directions.remove(go_direction)
-            self.harvesting_go_safe_position(ship, occupied_positions_next_turn, try_directions)
-        return go_direction
+            self.harvesting_go_safe_position(ship, try_directions)
+        else:
+            self.ship_next_direction(ship, go_direction)
+            self.ship_next_position(ship, go_direction)
 
     def get_direction_most_near_halite(self, directions):
         max_halite_found = 0
@@ -252,7 +260,7 @@ while True:
 
     def determine_move(ship):
 
-        ship_at_shipyard_goes_hella_halite(ship)
+        set_status_ship_at_shipyard(ship)
         validate_heading_hella_halite_status(ship)
         check_rollup(ship)
 
@@ -279,9 +287,9 @@ while True:
                 ship_status[ship.id] = 'harvesting'
 
 
-    def ship_at_shipyard_goes_hella_halite(ship):
+    def set_status_ship_at_shipyard(ship):
         if ship.position == me.shipyard.position or ship.id not in ship_status:
-            ship_status[ship.id] = 'heading_hella_halite'
+            ship_status[ship.id] = 'harvesting'
             ship_destination[ship.id] = get_position_most_halite()
 
 
