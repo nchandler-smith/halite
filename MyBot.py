@@ -102,18 +102,21 @@ class Admiral:
             if self.ship_next_position[ship.id] in self.locations_collision_imminent:
                 if move == Direction.Still:
                     break
+
                 elif ship_status[ship.id] == 'harvesting':
-                    #self.harvesting_go_safe_position(ship, self.get_positions_occupied_next_turn())
-                    self.ship_next_direction[ship.id] = Direction.Still
+                    self.harvesting_go_safe_position(ship, self.get_positions_occupied_next_turn())
+
                 elif ship_status[ship.id] == 'heading_hella_halite':
-                    # self.heading_hella_halite_go_safe_position()
-                    self.ship_next_direction[ship.id] = Direction.Still
+                    self.heading_hella_halite_go_safe_position(ship, ship_destination[ship.id])
+
                 elif ship_status[ship.id] == 'returning':
                     # self.returning_go_safe_position()
                     self.ship_next_direction[ship.id] = Direction.Still
+
                 elif ship_status[ship.id] == 'rollup':
                     # self.rollup_go_safe_position()
                     self.ship_next_direction[ship.id] = Direction.Still
+
                 else:
                     break
 
@@ -143,8 +146,8 @@ class Admiral:
         else:
             return random.choice(directions)
 
-    def heading_hella_halite_go_safe_position(self):
-        move = self.safe_navigate(ship, ship_destination[ship.id])
+    def heading_hella_halite_go_safe_position(self, ship, destination):
+        move = self.safe_navigate(ship, destination)
         return move
 
     def returning_go_safe_psition(self):
