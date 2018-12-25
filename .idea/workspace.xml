@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
-              <caret line="67" column="49" selection-start-line="67" selection-start-column="49" selection-end-line="67" selection-end-column="49" />
+            <state relative-caret-position="209">
+              <caret line="134" column="61" selection-end-line="289" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
@@ -52,6 +52,7 @@
       <find>validate_heading_hella_halite_status</find>
       <find>smart_</find>
       <find>find_direction_most_halite</find>
+      <find>Still</find>
     </findStrings>
     <replaceStrings>
       <replace>gatherong</replace>
@@ -150,7 +151,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="108553000" />
+    <option name="totallyTimeSpent" value="108921000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="268" y="89" width="1267" height="939" extended-state="0" />
@@ -245,8 +246,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="67" column="49" selection-start-line="67" selection-start-column="49" selection-end-line="67" selection-end-column="49" />
+        <state relative-caret-position="209">
+          <caret line="134" column="61" selection-end-line="289" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>

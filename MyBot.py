@@ -98,6 +98,7 @@ class Admiral:
         return False
 
     def update_locations_collision_imminent(self):
+        # Consider eliminating this step and handle tings in succession in reroute
         self.locations_collision_imminent = []
         self.ships_collision_imminent = []
         next_locations = list(self.ship_next_position.values())
@@ -131,15 +132,15 @@ class Admiral:
         if try_directions is None:
             try_directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
         if len(try_directions) == 0 or get_halite_in_direction(Direction.Still) >= HARVEST_HALITE_LOWER_LIMIT:
-            return Direction.Still
-
-        go_direction = find_safe_direction_most_halite(try_directions)
-
-        if ship.position.directional_offset(go_direction) in self.get_positions_occupied_next_turn():
-            try_directions.remove(go_direction)
-            self.harvesting_go_safe_position(ship, try_directions)
+            self.update_next_turn_info(ship, Direction.Still)
         else:
-            self.update_next_turn_info(ship, move)
+            go_direction = find_safe_direction_most_halite(try_directions)
+
+            if ship.position.directional_offset(go_direction) in self.get_positions_occupied_next_turn():
+                try_directions.remove(go_direction)
+                self.harvesting_go_safe_position(ship, try_directions)
+            else:
+                self.update_next_turn_info(ship, move)
 
     def returning_go_safe_position(self, ship, destination, try_directions=None):
         if try_directions is None:
