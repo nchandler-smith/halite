@@ -116,11 +116,11 @@ class Admiral:
 
         # for ships about to collide, set their positions and directions for next round
         # as though they will not move
-        for ship in self.ships_collision_imminent:
+        for ship in self.ships:
             self.update_next_turn_info(ship, Direction.Still)
 
     def reroute_ships_to_avoid_collisions(self):
-        for ship in self.ships_collision_imminent:
+        for ship in self.ships:
             if ship_status[ship.id] == 'harvesting':
                 self.harvesting_go_safe_position(ship)
             elif ship_status[ship.id] == 'returning':
