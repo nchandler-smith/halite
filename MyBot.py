@@ -132,7 +132,7 @@ class Admiral:
         if try_directions is None:
             try_directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
 
-        if len(try_directions) == 0 or get_halite_in_direction(Direction.Still) >= HARVEST_HALITE_LOWER_LIMIT:
+        if len(try_directions) == 0 or get_halite_in_direction(Direction.Still) > HARVEST_HALITE_LOWER_LIMIT:
             self.update_next_turn_info(ship, Direction.Still)
         else:
             go_direction = find_safe_direction_most_halite(try_directions)
@@ -266,7 +266,7 @@ while True:
             if test_halite_amount > max_halite_found:
                 max_halite_found = test_halite_amount
                 best_direction = direction
-        if max_halite_found >= HARVEST_HALITE_LOWER_LIMIT:
+        if max_halite_found > HARVEST_HALITE_LOWER_LIMIT:
             return best_direction
         else:
             return random.choice(directions)
