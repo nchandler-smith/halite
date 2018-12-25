@@ -65,8 +65,7 @@ class Admiral:
 
     def load_starting_info(self):
         for ship, move in zip(self.ships, self.moves):
-            self.set_position_occupied_next_turn(ship, move)
-            self.set_direction_next_turn(ship, move)
+            self.update_next_turn_info(ship, move)
 
     def intervene_if_needed(self):
         if self.is_collision_imminent():
@@ -140,8 +139,7 @@ class Admiral:
             try_directions.remove(go_direction)
             self.harvesting_go_safe_position(ship, try_directions)
         else:
-            self.set_direction_next_turn(ship, go_direction)
-            self.set_position_occupied_next_turn(ship, go_direction)
+            self.update_next_turn_info(ship, move)
 
     def returning_go_safe_position(self, ship, destination, try_directions=None):
         if try_directions is None:
@@ -153,8 +151,7 @@ class Admiral:
             try_directions.remove(go_direction)
             self.returning_go_safe_position(ship, destination, try_directions)
         else:
-            self.set_direction_next_turn(ship, go_direction)
-            self.set_position_occupied_next_turn(ship, go_direction)
+            self.update_next_turn_info(ship, move)
 
 
 admiral = Admiral()
