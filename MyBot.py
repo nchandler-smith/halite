@@ -48,6 +48,13 @@ class Admiral:
         self.ships_collision_imminent = None
 
     def command_safe_moves(self, ships, moves, command_queue):
+        self.intialize_admiral_attributes(command_queue, moves, ships)
+        self.load_starting_info()
+        self.intervene_if_needed()
+        self.load_command_queue()
+        return self.command_queue
+
+    def intialize_admiral_attributes(self, command_queue, moves, ships):
         self.command_queue = command_queue
         self.ships = ships
         self.moves = moves
@@ -56,17 +63,19 @@ class Admiral:
         self.locations_collision_imminent = []
         self.ships_collision_imminent = []
 
+    def load_starting_info(self):
         for ship, move in zip(self.ships, self.moves):
             self.set_position_occupied_next_turn(ship, move)
             self.set_direction_next_turn(ship, move)
 
+    def intervene_if_needed(self):
         if self.is_collision_imminent():
             self.update_locations_collision_imminent()
             self.reroute_ships_to_avoid_collisions()
 
+    def load_command_queue(self):
         for ship in self.ships:
             self.command_queue.append(ship.move(self.ship_next_direction[ship.id]))
-        return self.command_queue
 
     def get_positions_occupied_next_turn(self):
         return list(self.ship_next_position.values())
@@ -76,6 +85,10 @@ class Admiral:
 
     def set_direction_next_turn(self, ship, move):
         self.ship_next_direction[ship.id] = move
+
+    def update_next_turn_info(self, ship, move):
+        self.set_direction_next_turn(ship, move)
+        self.set_position_occupied_next_turn(ship, move)
 
     def is_collision_imminent(self):
         # Look for collisions(dupes) in the next_locations.
@@ -104,8 +117,7 @@ class Admiral:
         # for ships about to collide, set their positions and directions for next round
         # as though they will not move
         for ship in self.ships_collision_imminent:
-            self.set_direction_next_turn(ship, Direction.Still)
-            self.set_position_occupied_next_turn(ship, Direction.Still)
+            self.update_next_turn_info(ship, Direction.Still)
 
     def reroute_ships_to_avoid_collisions(self):
         for ship in self.ships_collision_imminent:
