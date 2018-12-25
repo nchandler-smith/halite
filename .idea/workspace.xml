@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8dd86b1e-a86e-4632-a9a8-1ec7aae8c870" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/MyBot.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="397">
-              <caret line="122" column="30" selection-start-line="122" selection-start-column="30" selection-end-line="122" selection-end-column="30" />
+            <state relative-caret-position="541">
+              <caret line="303" column="52" selection-start-line="303" selection-start-column="52" selection-end-line="303" selection-end-column="52" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
@@ -74,10 +75,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="335" />
-    <option name="y" value="120" />
-    <option name="width" value="1267" />
-    <option name="height" value="939" />
+    <option name="x" value="252" />
+    <option name="y" value="151" />
+    <option name="width" value="1385" />
+    <option name="height" value="1017" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -152,17 +153,17 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="109532000" />
+    <option name="totallyTimeSpent" value="113111000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="252" y="156" width="1267" height="939" extended-state="0" />
+    <frame x="252" y="93" width="1385" height="1017" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23673469" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21593447" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.33293977" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.3318919" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -172,7 +173,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32959184" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.2231405" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.29945946" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -247,8 +248,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="122" column="30" selection-start-line="122" selection-start-column="30" selection-end-line="122" selection-end-column="30" />
+        <state relative-caret-position="541">
+          <caret line="303" column="52" selection-start-line="303" selection-start-column="52" selection-end-line="303" selection-end-column="52" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>

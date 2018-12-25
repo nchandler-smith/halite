@@ -137,7 +137,8 @@ class Admiral:
         else:
             go_direction = find_safe_direction_most_halite(try_directions)
 
-            if ship.position.directional_offset(go_direction) in self.get_positions_occupied_next_turn():
+            if ship.position.directional_offset(go_direction) in self.get_positions_occupied_next_turn() \
+                    or self.will_this_move_end_in_shipyard(ship, go_direction):
                 try_directions.remove(go_direction)
                 self.harvesting_go_safe_position(ship, try_directions)
             else:
@@ -147,13 +148,17 @@ class Admiral:
         if try_directions is None:
             try_directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
 
-        go_direction = smart_navigate(ship, destination, try_directions)
-
-        if ship.position.directional_offset(go_direction) in self.get_positions_occupied_next_turn():
-            try_directions.remove(go_direction)
-            self.returning_go_safe_position(ship, destination, try_directions)
+        if len(try_directions) == 0:
+            self.update_next_turn_info(ship, Direction.Still)
         else:
-            self.update_next_turn_info(ship, move)
+            go_direction = smart_navigate(ship, destination, try_directions)
+
+            if ship.position.directional_offset(go_direction) in self.get_positions_occupied_next_turn() \
+                    or self.will_this_move_collide_shipyard(ship, go_direction):
+                try_directions.remove(go_direction)
+                self.returning_go_safe_position(ship, destination, try_directions)
+            else:
+                self.update_next_turn_info(ship, move)
 
 
 admiral = Admiral()
@@ -288,3 +293,12 @@ while True:
                 min_distance = distance
                 best_direction = direction
         return best_direction
+
+    def will_this_move_collide_shipyard(self, ship, direction):
+        new_position = ship.position.directional_offset(direction)
+        if new_position == me.shipyard.position:
+            return game_map[new_position].is_occupied
+
+    def will_this_move_end_in_shipyard(self, ship, direction):
+        new_position = ship.position.directional_offset(direction)
+        return new_position == me.shipyard.position;
