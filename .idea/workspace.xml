@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="109" column="50" selection-start-line="109" selection-start-column="50" selection-end-line="109" selection-end-column="50" />
+            <state relative-caret-position="265">
+              <caret line="111" column="12" selection-start-line="111" selection-start-column="12" selection-end-line="116" selection-end-column="21" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
@@ -145,12 +145,12 @@
       <workItem from="1545434412949" duration="5590000" />
       <workItem from="1545482461771" duration="4313000" />
       <workItem from="1545516233961" duration="37088000" />
-      <workItem from="1545693293364" duration="611000" />
+      <workItem from="1545693293364" duration="944000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104535000" />
+    <option name="totallyTimeSpent" value="104868000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="251" y="164" width="1267" height="939" extended-state="0" />
@@ -245,8 +245,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="109" column="50" selection-start-line="109" selection-start-column="50" selection-end-line="109" selection-end-column="50" />
+        <state relative-caret-position="265">
+          <caret line="111" column="12" selection-start-line="111" selection-start-column="12" selection-end-line="116" selection-end-column="21" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>
