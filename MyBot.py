@@ -131,6 +131,7 @@ class Admiral:
     def harvesting_go_safe_position(self, ship, try_directions=None):
         if try_directions is None:
             try_directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
+
         if len(try_directions) == 0 or get_halite_in_direction(Direction.Still) >= HARVEST_HALITE_LOWER_LIMIT:
             self.update_next_turn_info(ship, Direction.Still)
         else:
