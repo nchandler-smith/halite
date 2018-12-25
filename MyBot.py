@@ -47,8 +47,8 @@ class Admiral:
         self.locations_collision_imminent = None
         self.ships_collision_imminent = None
 
-    def command_safe_moves(self, ships, moves):
-        self.command_queue = []
+    def command_safe_moves(self, ships, moves, command_queue):
+        self.command_queue = command_queue
         self.ships = ships
         self.moves = moves
         self.ship_next_position = {}
@@ -78,6 +78,7 @@ class Admiral:
         self.ship_next_direction[ship.id] = move
 
     def is_collision_imminent(self):
+        # Look for collisions(dupes) in the next_locations.
         next_locations = list(self.ship_next_position.values())
         while len(next_locations) > 1:
             if next_locations.pop() in next_locations:
@@ -88,9 +89,8 @@ class Admiral:
         self.locations_collision_imminent = []
         self.ships_collision_imminent = []
         next_locations = list(self.ship_next_position.values())
-        ships = list(self.ship_next_position.keys())
 
-        # look for dupes in the next_locations. Dupes are collisions
+        # Look for dupes(collisions) in the next_locations.
         # Add ships and locations of dupes to collision imminent lists
         # Update moves assuming they stay still as they are about to collide
         while len(next_locations) > 1:
@@ -100,6 +100,7 @@ class Admiral:
                 for ship in self.ships:
                     if self.ship_next_position[ship.id] == test_location:
                         self.ships_collision_imminent.append(ship)
+
         # for ships about to collide, set their positions and directions for next round
         # as though they will not move
         for ship in self.ships_collision_imminent:
@@ -108,7 +109,6 @@ class Admiral:
 
     def reroute_ships_to_avoid_collisions(self):
         for ship in self.ships_collision_imminent:
-            self.set_direction_next_turn(ship, Direction.Still)
             if ship_status[ship.id] == 'harvesting':
                 self.harvesting_go_safe_position(ship)
             elif ship_status[ship.id] == 'returning':
@@ -188,15 +188,8 @@ while True:
     # You extract player metadata and the updated map metadata here for convenience.
     me = game.me
     game_map = game.game_map
-
+    command_queue = []
     moves = []
-
-    for ship in me.get_ships():
-
-        move = determine_move(ship)
-        moves.append(move)
-
-    command_queue = admiral.command_safe_moves(list(me.get_ships()), moves)
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
@@ -207,6 +200,12 @@ while True:
     and not game_map[me.shipyard].is_occupied\
     and game.turn_number < constants.MAX_TURNS - NUMBER_OF_TURNS_SUPPRESS_ALL_SPAWNS:
         command_queue.append(me.shipyard.spawn())
+
+    for ship in me.get_ships():
+        move = determine_move(ship)
+        moves.append(move)
+
+    command_queue = admiral.command_safe_moves(list(me.get_ships()), moves, command_queue)
 
     # Send your moves back to the game environment, ending this turn.
     game.end_turn(command_queue)

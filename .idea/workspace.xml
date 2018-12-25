@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8dd86b1e-a86e-4632-a9a8-1ec7aae8c870" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/MyBot.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,11 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="265">
-              <caret line="111" column="12" selection-start-line="111" selection-start-column="12" selection-end-line="116" selection-end-column="21" />
-              <folding>
-                <element signature="e#105#133#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-584">
+              <caret line="22" column="14" lean-forward="true" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -72,8 +70,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="251" />
-    <option name="y" value="164" />
+    <option name="x" value="335" />
+    <option name="y" value="120" />
     <option name="width" value="1267" />
     <option name="height" value="939" />
   </component>
@@ -150,10 +148,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104868000" />
+    <option name="totallyTimeSpent" value="107662000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="251" y="164" width="1267" height="939" extended-state="0" />
+    <frame x="335" y="120" width="1267" height="939" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23673469" />
@@ -245,11 +243,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="111" column="12" selection-start-line="111" selection-start-column="12" selection-end-line="116" selection-end-column="21" />
-          <folding>
-            <element signature="e#105#133#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-584">
+          <caret line="22" column="14" lean-forward="true" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
         </state>
       </provider>
     </entry>
