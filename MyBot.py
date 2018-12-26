@@ -32,6 +32,17 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
 
+
+def get_move(ship):
+    # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
+    #   Else, collect halite.
+    if game_map[ship.position].halite_amount < constants.MAX_HALITE / 10 or ship.is_full:
+        directions = [Direction.North, Direction.South, Direction.East, Direction.West]
+        return ship.move(random.choice(directions))
+    else:
+        return ship.stay_still()
+
+
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
@@ -45,14 +56,9 @@ while True:
     command_queue = []
 
     for ship in me.get_ships():
-        # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
-        #   Else, collect halite.
-        if game_map[ship.position].halite_amount < constants.MAX_HALITE / 10 or ship.is_full:
-            command_queue.append(
-                ship.move(
-                    random.choice([ Direction.North, Direction.South, Direction.East, Direction.West ])))
-        else:
-            command_queue.append(ship.stay_still())
+        direction = get_move(ship)
+
+        command_queue.append(direction)
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
