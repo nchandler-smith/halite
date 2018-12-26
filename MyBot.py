@@ -33,14 +33,20 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 """ <<<Game Loop>>> """
 
 
-def get_move(ship):
-    # For each of your ships, move randomly if the ship is on a low halite location or the ship is full.
-    #   Else, collect halite.
-    if game_map[ship.position].halite_amount < constants.MAX_HALITE / 10 or ship.is_full:
-        directions = [Direction.North, Direction.South, Direction.East, Direction.West]
-        return ship.move(random.choice(directions))
-    else:
-        return ship.stay_still()
+def get_direction_to_move(ship, allowed_directions=None):
+    if allowed_directions is None:
+        allowed_directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
+
+    test_direction = random.choice(allowed_directions)
+
+    ship_position_next_turn = ship.position.directional_offset(test_direction)
+
+    if ship_position_next_turn in fleet_positions_next_turn:
+        allowed_directions.remove(test_direction)
+        get_direction_to_move(ship, allowed_directions)
+
+    fleet_positions_next_turn.append(ship_position_next_turn)
+    return test_direction
 
 
 while True:
@@ -54,11 +60,12 @@ while True:
     # A command queue holds all the commands you will run this turn. You build this list up and submit it at the
     #   end of the turn.
     command_queue = []
+    fleet_positions_next_turn = []
 
     for ship in me.get_ships():
-        direction = get_move(ship)
+        direction = get_direction_to_move(ship)
 
-        command_queue.append(direction)
+        command_queue.append(ship.move(direction))
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
