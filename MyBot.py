@@ -37,22 +37,25 @@ def handle_ships_staying_to_harvest(ship):
     current_ship_position = ship.position
     if game_map[current_ship_position].halite_amount > 0:
         fleet_move_chart[ship.id] = Direction.Still
-        fleet_positions_next_turn.append(ship.position) #get rid of this use dict values
+        fleet_positions_next_turn.append(ship.position)
+
 
 
 def get_direction_to_move(ship, allowed_directions=None):
-    if allowed_directions is None:
-        allowed_directions = [Direction.North, Direction.South, Direction.East, Direction.West]
+    if ship.id not in list(fleet_move_chart.keys()):
 
-    test_direction = random.choice(allowed_directions)
-    test_position = ship.position.directional_offset(test_direction)
+        if allowed_directions is None:
+            allowed_directions = [Direction.North, Direction.South, Direction.East, Direction.West]
 
-    if test_position in fleet_positions_next_turn:
-        allowed_directions.remove(test_direction)
-        get_direction_to_move(ship, allowed_directions)
+        test_direction = random.choice(allowed_directions)
+        test_position = ship.position.directional_offset(test_direction)
 
-    fleet_move_chart[ship.id] = test_direction
-    fleet_positions_next_turn.append(test_position)
+        if test_position in fleet_positions_next_turn:
+            allowed_directions.remove(test_direction)
+            get_direction_to_move(ship, allowed_directions)
+
+        fleet_move_chart[ship.id] = test_direction
+        fleet_positions_next_turn.append(test_position)
 
 
 while True:
