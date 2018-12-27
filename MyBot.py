@@ -35,7 +35,7 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 def handle_ships_staying_to_harvest(ship):
     current_ship_position = ship.position
-    if game_map[current_ship_position].halite_amount > 0:
+    if game_map[current_ship_position].halite_amount > 0 and not ship.is_full:
         fleet_move_chart[ship.id] = Direction.Still
         fleet_positions_next_turn.append(ship.position)
 
