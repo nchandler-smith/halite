@@ -40,7 +40,6 @@ def handle_ships_staying_to_harvest(ship):
         fleet_positions_next_turn.append(ship.position)
 
 
-
 def get_direction_to_move(ship, allowed_directions=None):
     if ship.id not in list(fleet_move_chart.keys()):
 
