@@ -41,7 +41,7 @@ def handle_ships_staying_to_harvest(ship):
 
 
 def get_direction_to_move(ship, allowed_directions=None):
-    if ship.id not in list(fleet_move_chart.keys()):
+    if ship.id not in fleet_move_chart.keys():
 
         if allowed_directions is None:
             allowed_directions = [Direction.North, Direction.South, Direction.East, Direction.West]
@@ -73,6 +73,8 @@ while True:
 
     for ship in me.get_ships():
         handle_ships_staying_to_harvest(ship)
+
+    for ship in me.get_ships():
         get_direction_to_move(ship)
 
     for ship in me.get_ships():
