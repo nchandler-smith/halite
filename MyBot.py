@@ -33,13 +33,6 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 """ <<<Game Loop>>> """
 
 
-def is_position_in_list(test_position, position_list):
-    for position in position_list:
-        if position == test_position:
-            return True
-    return False
-
-
 def assign_ship_status(ship):
     current_ship_position = ship.position
     if ship.id not in ship_status.keys():
@@ -58,7 +51,7 @@ def assign_ship_status(ship):
 def handle_ships_staying_to_harvest(ship):
     if ship_status[ship.id] == 'harvest':
         fleet_move_chart[ship.id] = Direction.Still
-        fleet_positions_next_turn.append(ship.position)
+        fleet_positions_next_turn[ship.id] = ship.position
 
 
 def safe_navigate(ship, destination, directions):
@@ -98,12 +91,12 @@ def get_direction_to_move(ship, allowed_directions=None):
             test_direction = safe_navigate(ship, me.shipyard.position, allowed_directions)
 
         test_position = ship.position.directional_offset(test_direction)
-        if is_position_in_list(test_position, fleet_positions_next_turn):
+        if test_position in list(fleet_positions_next_turn.values()):
             allowed_directions.remove(test_direction)
             get_direction_to_move(ship, allowed_directions)
 
         fleet_move_chart[ship.id] = test_direction
-        fleet_positions_next_turn.append(test_position)
+        fleet_positions_next_turn[ship.id] = test_position
 
 
 ship_status = {}
@@ -119,7 +112,7 @@ while True:
     #   end of the turn.
     command_queue = []
     fleet_move_chart = {}
-    fleet_positions_next_turn = []
+    fleet_positions_next_turn = {}
 
     for ship in me.get_ships():
         assign_ship_status(ship)
@@ -133,7 +126,9 @@ while True:
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if game.turn_number <= 400 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
+    if game.turn_number <= 400 and \
+            me.halite_amount >= constants.SHIP_COST \
+            and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.
