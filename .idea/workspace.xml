@@ -13,8 +13,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="43" column="46" selection-end-line="90" />
+            <state relative-caret-position="330">
+              <caret line="81" column="32" lean-forward="true" selection-end-line="98" />
               <folding>
                 <element signature="e#105#115#0" expanded="true" />
               </folding>
@@ -29,6 +29,11 @@
       </file>
     </leaf>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>fleet_move_chart</find>
+    </findStrings>
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -37,8 +42,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="284" />
-    <option name="y" value="110" />
+    <option name="x" value="322" />
+    <option name="y" value="137" />
     <option name="width" value="1385" />
     <option name="height" value="1017" />
   </component>
@@ -97,10 +102,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6715000" />
+    <option name="totallyTimeSpent" value="7496000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="365" y="54" width="1385" height="1017" extended-state="0" />
+    <frame x="322" y="137" width="1385" height="1017" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21593447" />
@@ -135,8 +140,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="43" column="46" selection-end-line="90" />
+        <state relative-caret-position="330">
+          <caret line="81" column="32" lean-forward="true" selection-end-line="98" />
           <folding>
             <element signature="e#105#115#0" expanded="true" />
           </folding>

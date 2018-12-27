@@ -32,16 +32,22 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 """ <<<Game Loop>>> """
 
-
-def handle_ships_staying_to_harvest(ship):
+def assign_ship_status(ship):
     current_ship_position = ship.position
     if game_map[current_ship_position].halite_amount > 0 and not ship.is_full:
+        ship_status[ship.id] = 'harvest'
+    else:
+        ship_status[ship.id] = 'explore'
+
+
+def handle_ships_staying_to_harvest(ship):
+    if ship_status[ship.id] == 'harvest':
         fleet_move_chart[ship.id] = Direction.Still
         fleet_positions_next_turn.append(ship.position)
 
 
 def get_direction_to_move(ship, allowed_directions=None):
-    if ship.id not in fleet_move_chart.keys():
+    if ship_status[ship.id] == 'explore':
 
         if allowed_directions is None:
             allowed_directions = [Direction.North, Direction.South, Direction.East, Direction.West]
@@ -57,6 +63,7 @@ def get_direction_to_move(ship, allowed_directions=None):
         fleet_positions_next_turn.append(test_position)
 
 
+ship_status = {}
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
@@ -72,6 +79,7 @@ while True:
     fleet_positions_next_turn = []
 
     for ship in me.get_ships():
+        assign_ship_status(ship)
         handle_ships_staying_to_harvest(ship)
 
     for ship in me.get_ships():
