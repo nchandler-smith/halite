@@ -33,6 +33,13 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 """ <<<Game Loop>>> """
 
 
+def is_position_in_list(test_position, position_list):
+    for position in position_list:
+        if position == test_position:
+            return True
+    return False
+
+
 def assign_ship_status(ship):
     current_ship_position = ship.position
     if ship.id not in ship_status.keys():
@@ -91,7 +98,7 @@ def get_direction_to_move(ship, allowed_directions=None):
             test_direction = safe_navigate(ship, me.shipyard.position, allowed_directions)
 
         test_position = ship.position.directional_offset(test_direction)
-        if test_position in fleet_positions_next_turn:
+        if is_position_in_list(test_position, fleet_positions_next_turn):
             allowed_directions.remove(test_direction)
             get_direction_to_move(ship, allowed_directions)
 
