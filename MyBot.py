@@ -33,6 +33,10 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 """ <<<Game Loop>>> """
 
 
+def position_to_tuple(position):
+    return position.x, position.y
+
+
 def assign_ship_status(ship):
     current_ship_position = ship.position
     if ship.id not in ship_status.keys():
@@ -51,7 +55,7 @@ def assign_ship_status(ship):
 def handle_ships_staying_to_harvest(ship):
     if ship_status[ship.id] == 'harvest':
         fleet_move_chart[ship.id] = Direction.Still
-        fleet_positions_next_turn[ship.id] = ship.position
+        fleet_positions_next_turn[ship.id] = position_to_tuple(ship.position)
 
 
 def safe_navigate(ship, destination, directions):
@@ -91,12 +95,12 @@ def get_direction_to_move(ship, allowed_directions=None):
             test_direction = safe_navigate(ship, me.shipyard.position, allowed_directions)
 
         test_position = ship.position.directional_offset(test_direction)
-        if test_position in list(fleet_positions_next_turn.values()):
+        if position_to_tuple(test_position) in fleet_positions_next_turn.values():
             allowed_directions.remove(test_direction)
             get_direction_to_move(ship, allowed_directions)
 
         fleet_move_chart[ship.id] = test_direction
-        fleet_positions_next_turn[ship.id] = test_position
+        fleet_positions_next_turn[ship.id] = position_to_tuple(test_position)
 
 
 ship_status = {}

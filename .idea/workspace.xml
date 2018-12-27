@@ -13,8 +13,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="130" column="53" selection-end-line="136" />
+            <state relative-caret-position="1426">
+              <caret line="121" column="32" lean-forward="true" selection-start-line="121" selection-start-column="32" selection-end-line="121" selection-end-column="32" />
               <folding>
                 <element signature="e#105#115#0" expanded="true" />
               </folding>
@@ -36,7 +36,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hlt/positionals.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
+            <state relative-caret-position="198">
               <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" />
             </state>
           </provider>
@@ -64,8 +64,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="533" />
-    <option name="y" value="197" />
+    <option name="x" value="574" />
+    <option name="y" value="87" />
     <option name="width" value="1020" />
     <option name="height" value="1017" />
   </component>
@@ -124,11 +124,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12034000" />
+    <option name="totallyTimeSpent" value="13844000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="533" y="197" width="1020" height="1017" extended-state="0" />
-    <editor active="true" />
+    <frame x="574" y="87" width="1020" height="1017" extended-state="0" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.21593447" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -171,15 +170,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/hlt/positionals.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
+        <state relative-caret-position="198">
           <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="130" column="53" selection-end-line="136" />
+        <state relative-caret-position="1426">
+          <caret line="121" column="32" lean-forward="true" selection-start-line="121" selection-start-column="32" selection-end-line="121" selection-end-column="32" />
           <folding>
             <element signature="e#105#115#0" expanded="true" />
           </folding>
