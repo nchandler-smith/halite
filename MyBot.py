@@ -38,6 +38,17 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 """ <<<Game Loop>>> """
 
 
+def get_total_halite(game_map):
+    game_height = game_map.height
+    game_width = game_map.width
+    total_halite = 0
+    for x_pos in range(game_width):
+        for y_pos in range(game_height):
+            position = Position(x_pos, y_pos)
+            total_halite += game_map[(position)].halite_amount
+    return total_halite
+
+
 def assign_ship_status(ship):
     current_ship_position = ship.position
     if ship.id not in ship_status.keys():
@@ -108,6 +119,12 @@ def get_direction_to_move(ship):
         fleet_positions_next_turn.append(go_position)
 
 
+map_starting_halite_total = get_total_halite(game.game_map)
+REVENUE_EXPECTATION = 8000
+NUMBER_OF_SHIPS_UPPER_LIMIT = map_starting_halite_total / REVENUE_EXPECTATION
+NUMBER_OF_SHIPS_LOWER_LIMIT = 5
+SPAWN_TURN_LIMIT = 250
+
 ship_status = {}
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
@@ -135,7 +152,10 @@ while True:
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if game.turn_number <= 125 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
+    if (len(me.get_ships()) < NUMBER_OF_SHIPS_LOWER_LIMIT or game.turn_number <= SPAWN_TURN_LIMIT) \
+            and len(me.get_ships()) < NUMBER_OF_SHIPS_UPPER_LIMIT \
+            and me.halite_amount >= constants.SHIP_COST \
+            and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.
