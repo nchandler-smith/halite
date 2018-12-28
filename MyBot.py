@@ -57,7 +57,7 @@ def handle_ships_staying_to_harvest(ship):
 def safe_navigate(ship, destination):
     directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
     min_distance = 1000
-    best_direction = random.choice(directions)
+    best_direction = Direction.Still
     for direction in directions:
         test_location = ship.position.directional_offset(direction)
         distance = game_map.calculate_distance(test_location, destination)
@@ -70,7 +70,7 @@ def safe_navigate(ship, destination):
 def get_direction_most_halite(ship):
     directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
     max_halite_found = 0
-    best_direction = random.choice(directions)
+    best_direction = Direction.Still
     for test_direction in directions:
         test_location = ship.position.directional_offset(test_direction)
         halite_at_test_location = game_map[test_location].halite_amount
@@ -89,9 +89,9 @@ def get_direction_to_move(ship, allowed_directions=None):
         if ship_status[ship.id] == 'returning':
             go_direction = safe_navigate(ship, me.shipyard.position)
 
-        gp_position = ship.position.directional_offset(go_direction)
         fleet_move_chart[ship.id] = go_direction
-        fleet_positions_next_turn.append(go_direction)
+        go_position = ship.position.directional_offset(go_direction)
+        fleet_positions_next_turn.append(go_position)
 
 
 ship_status = {}
