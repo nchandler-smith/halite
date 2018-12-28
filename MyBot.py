@@ -33,10 +33,6 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 """ <<<Game Loop>>> """
 
 
-def position_to_tuple(position):
-    return position.x, position.y
-
-
 def assign_ship_status(ship):
     current_ship_position = ship.position
     if ship.id not in ship_status.keys():
@@ -55,28 +51,30 @@ def assign_ship_status(ship):
 def handle_ships_staying_to_harvest(ship):
     if ship_status[ship.id] == 'harvest':
         fleet_move_chart[ship.id] = Direction.Still
-        fleet_positions_next_turn[ship.id] = position_to_tuple(ship.position)
+        fleet_positions_next_turn.append(ship.position.directional_offset(Direction.Still))
 
 
-def safe_navigate(ship, destination, directions):
+def safe_navigate(ship, destination):
+    directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
     min_distance = 1000
     best_direction = random.choice(directions)
     for direction in directions:
         test_location = ship.position.directional_offset(direction)
         distance = game_map.calculate_distance(test_location, destination)
-        if distance < min_distance:
+        if distance < min_distance and test_location not in fleet_positions_next_turn:
             min_distance = distance
             best_direction = direction
     return best_direction
 
 
-def get_direction_most_halite(ship, directions):
+def get_direction_most_halite(ship):
+    directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
     max_halite_found = 0
     best_direction = random.choice(directions)
     for test_direction in directions:
         test_location = ship.position.directional_offset(test_direction)
         halite_at_test_location = game_map[test_location].halite_amount
-        if halite_at_test_location > max_halite_found:
+        if halite_at_test_location > max_halite_found and test_location not in fleet_positions_next_turn:
             best_direction = test_direction
             max_halite_found = halite_at_test_location
     return best_direction
@@ -85,22 +83,15 @@ def get_direction_most_halite(ship, directions):
 def get_direction_to_move(ship, allowed_directions=None):
     if ship_status[ship.id] != 'harvest':
 
-        if allowed_directions is None:
-            allowed_directions = [Direction.North, Direction.South, Direction.East, Direction.West]
-
         if ship_status[ship.id] == 'explore':
-            test_direction = get_direction_most_halite(ship, allowed_directions)
+            go_direction = get_direction_most_halite(ship)
 
         if ship_status[ship.id] == 'returning':
-            test_direction = safe_navigate(ship, me.shipyard.position, allowed_directions)
+            go_direction = safe_navigate(ship, me.shipyard.position)
 
-        test_position = ship.position.directional_offset(test_direction)
-        if position_to_tuple(test_position) in fleet_positions_next_turn.values():
-            allowed_directions.remove(test_direction)
-            get_direction_to_move(ship, allowed_directions)
-
-        fleet_move_chart[ship.id] = test_direction
-        fleet_positions_next_turn[ship.id] = position_to_tuple(test_position)
+        gp_position = ship.position.directional_offset(go_direction)
+        fleet_move_chart[ship.id] = go_direction
+        fleet_positions_next_turn.append(go_direction)
 
 
 ship_status = {}
@@ -116,7 +107,7 @@ while True:
     #   end of the turn.
     command_queue = []
     fleet_move_chart = {}
-    fleet_positions_next_turn = {}
+    fleet_positions_next_turn = []
 
     for ship in me.get_ships():
         assign_ship_status(ship)
