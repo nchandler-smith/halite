@@ -68,8 +68,8 @@ def safe_navigate(ship, destination):
 
 
 def get_direction_most_halite(ship):
-    directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
-    max_halite_found = 0
+    directions = [Direction.North, Direction.South, Direction.East, Direction.West]
+    max_halite_found = -1
     best_direction = Direction.Still
     for test_direction in directions:
         test_location = ship.position.directional_offset(test_direction)
@@ -80,7 +80,7 @@ def get_direction_most_halite(ship):
     return best_direction
 
 
-def get_direction_to_move(ship, allowed_directions=None):
+def get_direction_to_move(ship):
     if ship_status[ship.id] != 'harvest':
 
         if ship_status[ship.id] == 'explore':
