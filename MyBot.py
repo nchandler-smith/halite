@@ -72,13 +72,22 @@ def safe_navigate(ship, destination):
     return best_direction
 
 
+def evaluate_halite_in_direciton(position):
+    total_halite_found = 0
+    for i in range(-3, 3):
+        for j in range(7):
+            scan_position = Position(i, j)
+            total_halite_found += game_map[position + scan_position].halite_amount
+    return total_halite_found
+
+
 def get_direction_most_halite(ship):
     directions = [Direction.North, Direction.South, Direction.East, Direction.West]
     max_halite_found = -1
     best_direction = Direction.Still
     for test_direction in directions:
         test_location = ship.position.directional_offset(test_direction)
-        halite_at_test_location = game_map[test_location].halite_amount
+        halite_at_test_location = evaluate_halite_in_direciton(test_location)
         if halite_at_test_location > max_halite_found and test_location not in fleet_positions_next_turn:
             best_direction = test_direction
             max_halite_found = halite_at_test_location
@@ -126,7 +135,7 @@ while True:
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if game.turn_number <= 200 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
+    if game.turn_number <= 125 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.
