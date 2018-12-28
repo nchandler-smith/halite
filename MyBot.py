@@ -111,18 +111,34 @@ def get_direction_most_halite(ship):
 
 def explore_fringe(ship, direction):
     root_position = ship.position.directional_offset(direction)
-    box_size = 7
-    for i in range(0, box_size//2):
-        new_position_1 = root_position + Position(i, 0)
-        if new_position_1 not in fleet_positions_next_turn:
-            ship_destination[ship.id] = new_position_1
-            ship_status[ship.id] = 'explore_fringe'
-            return new_position_1
-        new_position_2 = root_position + Position(-1*i, 0)
-        if new_position_2 not in fleet_positions_next_turn:
-            ship_destination[ship.id] = new_position_2
-            ship_status[ship.id] = 'explore_fringe'
-            return new_position_2
+    box_size = 9
+    if direction in [Direction.North, Direction.South]:
+        for i in range(0, box_size//2):
+            new_position_1 = root_position + Position(i, 0)
+            if new_position_1 not in fleet_positions_next_turn:
+                ship_destination[ship.id] = new_position_1
+                ship_status[ship.id] = 'explore_fringe'
+                return new_position_1
+            new_position_2 = root_position + Position(-1*i, 0)
+            if new_position_2 not in fleet_positions_next_turn:
+                ship_destination[ship.id] = new_position_2
+                ship_status[ship.id] = 'explore_fringe'
+                return new_position_2
+
+    else:
+        for i in range(0, box_size//2):
+            new_position_1 = root_position + Position(0, i)
+            if new_position_1 not in fleet_positions_next_turn:
+                ship_destination[ship.id] = new_position_1
+                ship_status[ship.id] = 'explore_fringe'
+                return new_position_1
+            new_position_2 = root_position + Position(0, -1*i)
+            if new_position_2 not in fleet_positions_next_turn:
+                ship_destination[ship.id] = new_position_2
+                ship_status[ship.id] = 'explore_fringe'
+                return new_position_2
+
+
     return root_position
 
 
