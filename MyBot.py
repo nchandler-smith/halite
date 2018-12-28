@@ -61,7 +61,8 @@ def assign_ship_status(ship):
     elif ship.is_full:
         ship_status[ship.id] = 'returning'
     elif ship_status[ship.id] == 'explore_fringe':
-        pass
+        if ship.position == ship_destination[ship.id]:
+            ship_status[ship.id] = 'explore'
     else:
         ship_status[ship.id] = 'explore'
 
