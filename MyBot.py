@@ -60,6 +60,8 @@ def assign_ship_status(ship):
         ship_status[ship.id] = 'harvest'
     elif ship.is_full:
         ship_status[ship.id] = 'returning'
+    elif ship_status[ship.id] == 'explore_fringe':
+        pass
     else:
         ship_status[ship.id] = 'explore'
 
@@ -102,7 +104,25 @@ def get_direction_most_halite(ship):
         if halite_at_test_location > max_halite_found and test_location not in fleet_positions_next_turn:
             best_direction = test_direction
             max_halite_found = halite_at_test_location
+    explore_fringe(ship, best_direction)
     return best_direction
+
+
+def explore_fringe(ship, direction):
+    root_position = ship.position.directional_offset(direction)
+    box_size = 7
+    for i in range(0, box_size//2):
+        new_position_1 = root_position + Position(i, 0)
+        if new_position_1 not in fleet_positions_next_turn:
+            ship_destination[ship.id] = new_position_1
+            ship_status[ship.id] = 'explore_fringe'
+            return new_position_1
+        new_position_2 = root_position + Position(-1*i, 0)
+        if new_position_2 not in fleet_positions_next_turn:
+            ship_destination[ship.id] = new_position_2
+            ship_status[ship.id] = 'explore_fringe'
+            return new_position_2
+    return root_position
 
 
 def get_direction_to_move(ship):
@@ -111,8 +131,11 @@ def get_direction_to_move(ship):
         if ship_status[ship.id] == 'explore':
             go_direction = get_direction_most_halite(ship)
 
-        if ship_status[ship.id] == 'returning':
+        elif ship_status[ship.id] == 'returning':
             go_direction = safe_navigate(ship, me.shipyard.position)
+
+        elif ship_status[ship.id] == 'explore_fringe':
+            go_direction = safe_navigate(ship, ship_destination[ship.id])
 
         fleet_move_chart[ship.id] = go_direction
         go_position = ship.position.directional_offset(go_direction)
@@ -126,6 +149,7 @@ NUMBER_OF_SHIPS_LOWER_LIMIT = 5
 SPAWN_TURN_LIMIT = 250
 
 ship_status = {}
+ship_destination = {}
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
