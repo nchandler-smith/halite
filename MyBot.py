@@ -109,6 +109,20 @@ def get_direction_most_halite(ship):
     return best_direction
 
 
+def get_direction_most_halite_above_threshold(ship, halite_amount_threshold):
+    directions = [Direction.North, Direction.South, Direction.East, Direction.West]
+    max_halite_found = halite_amount_threshold
+    best_direction = Direction.Still
+    for test_direction in directions:
+        test_location = ship.position.directional_offset(test_direction)
+        halite_at_test_location = evaluate_halite_in_direciton(test_location)
+        if halite_at_test_location > max_halite_found and test_location not in fleet_positions_next_turn:
+            best_direction = test_direction
+            max_halite_found = halite_at_test_location
+    explore_fringe(ship, best_direction)
+    return best_direction
+
+
 def explore_fringe(ship, direction):
     root_position = ship.position.directional_offset(direction)
     box_size = 9
@@ -137,8 +151,6 @@ def explore_fringe(ship, direction):
                 ship_destination[ship.id] = new_position_2
                 ship_status[ship.id] = 'explore_fringe'
                 return new_position_2
-
-
     return root_position
 
 
@@ -153,6 +165,9 @@ def get_direction_to_move(ship):
 
         elif ship_status[ship.id] == 'explore_fringe':
             go_direction = safe_navigate(ship, ship_destination[ship.id])
+            go_position = ship.position.directional_offset(go_direction)
+            # test go_position amount of halite = 0
+            # if so, check for halite amount in other directions above threshold
 
         fleet_move_chart[ship.id] = go_direction
         go_position = ship.position.directional_offset(go_direction)
