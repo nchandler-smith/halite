@@ -204,7 +204,8 @@ while True:
     if (len(me.get_ships()) < NUMBER_OF_SHIPS_LOWER_LIMIT or game.turn_number <= SPAWN_TURN_LIMIT) \
             and len(me.get_ships()) < NUMBER_OF_SHIPS_UPPER_LIMIT \
             and me.halite_amount >= constants.SHIP_COST \
-            and not game_map[me.shipyard].is_occupied:
+            and not game_map[me.shipyard].is_occupied \
+            and me.shipyard.position not in fleet_positions_next_turn:
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.

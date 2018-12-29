@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8dd86b1e-a86e-4632-a9a8-1ec7aae8c870" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/MyBot.py" afterDir="false" />
-    </list>
+    <list default="true" id="8dd86b1e-a86e-4632-a9a8-1ec7aae8c870" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +13,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1230">
-              <caret line="93" column="20" lean-forward="true" selection-start-line="93" selection-start-column="20" selection-end-line="93" selection-end-column="20" />
+            <state relative-caret-position="540">
+              <caret line="211" lean-forward="true" selection-end-line="211" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
@@ -93,15 +90,16 @@
       <workItem from="1543343843186" duration="1375000" />
       <workItem from="1543413835089" duration="220000" />
       <workItem from="1543670976383" duration="602000" />
-      <workItem from="1546006813187" duration="15086000" />
+      <workItem from="1546006813187" duration="15611000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17418000" />
+    <option name="totallyTimeSpent" value="17943000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="195" y="103" width="1121" height="1047" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.21223354" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -132,8 +130,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1230">
-          <caret line="93" column="20" lean-forward="true" selection-start-line="93" selection-start-column="20" selection-end-line="93" selection-end-column="20" />
+        <state relative-caret-position="540">
+          <caret line="211" lean-forward="true" selection-end-line="211" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>
