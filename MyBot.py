@@ -89,7 +89,7 @@ def safe_navigate(ship, destination):
 def evaluate_halite_in_region_from_direction(position):
     total_halite_found = 0
     for i in range(-3, 3):
-        for j in range(7):
+        for j in range(-3, 3):
             scan_position = Position(i, j)
             total_halite_found += game_map[position + scan_position].halite_amount
     return total_halite_found
@@ -121,21 +121,6 @@ def get_direction_most_halite_above_threshold(ship, halite_amount_threshold):
             max_halite_found = halite_at_test_location
     explore_fringe(ship, best_direction)
     return best_direction
-
-
-def get_position_most_halite_above_threshold(ship, halite_amount_threshold):
-    origin = ship.position
-    positions = [Position(0,0), Position(0,-1), Position(-1,-1), Position(-1,0), Position(-1,1),
-                 Position(0,1), Position(1,1), Position(1,0), Position(1,-1)]
-    max_halite_found = halite_amount_threshold
-    best_position = origin
-    for position_offset in positions:
-        test_location = origin + position_offset
-        halite_at_test_location = game_map[test_location].halite_amount
-        if halite_at_test_location > max_halite_found and test_location not in fleet_positions_next_turn:
-            best_position = test_location
-            max_halite_found = halite_at_test_location
-    return best_position
 
 
 def explore_fringe(ship, direction):
@@ -180,9 +165,6 @@ def get_direction_to_move(ship):
 
         elif ship_status[ship.id] == 'explore_fringe':
             go_direction = safe_navigate(ship, ship_destination[ship.id])
-            go_position = ship.position.directional_offset(go_direction)
-            if game_map[go_position].amount == 0:
-                get_position_most_halite_above_threshold(ship, 0)
 
         fleet_move_chart[ship.id] = go_direction
         go_position = ship.position.directional_offset(go_direction)
