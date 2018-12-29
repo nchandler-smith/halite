@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8dd86b1e-a86e-4632-a9a8-1ec7aae8c870" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/MyBot.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="397">
-              <caret line="108" column="25" selection-end-line="201" />
+            <state relative-caret-position="371">
+              <caret line="97" column="117" selection-start-line="97" selection-start-column="117" selection-end-line="97" selection-end-column="117" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
@@ -30,6 +31,9 @@
     <findStrings>
       <find>fleet_positions_next_turn</find>
       <find>get_direction_most_halite_above_threshold</find>
+      <find>total_halite_found</find>
+      <find>evaluate_halite_in_region_from_direction</find>
+      <find>get_direction_highest_reward</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -89,12 +93,12 @@
       <workItem from="1543343843186" duration="1375000" />
       <workItem from="1543413835089" duration="220000" />
       <workItem from="1543670976383" duration="602000" />
-      <workItem from="1546006813187" duration="12507000" />
+      <workItem from="1546006813187" duration="13504000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14839000" />
+    <option name="totallyTimeSpent" value="15836000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="367" y="104" width="1121" height="1047" extended-state="0" />
@@ -129,8 +133,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="108" column="25" selection-end-line="201" />
+        <state relative-caret-position="371">
+          <caret line="97" column="117" selection-start-line="97" selection-start-column="117" selection-end-line="97" selection-end-column="117" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>

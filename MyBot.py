@@ -86,13 +86,18 @@ def safe_navigate(ship, destination):
     return best_direction
 
 
-def evaluate_reward_in_region_from_direction(position):
-    total_halite_found = 0
+def evaluate_reward_in_region_from_direction(ship, position):
+    origin  = ship.position
+    total_reward = 0
+    cell_occupied_penalty = 200
     for i in range(-3, 3):
         for j in range(-3, 3):
             scan_position = Position(i, j)
-            total_halite_found += game_map[position + scan_position].halite_amount
-    return total_halite_found
+            test_position = position + scan_position
+            distance_from_origin = game_map.calculate_distance(origin, test_position)
+            distance_penalty = distance_from_origin if distance_from_origin > 0 else 1
+            total_reward += (game_map[test_position].halite_amount / distance_penalty) - cell_occupied_penalty * int(game_map[test_position].is_occupied)
+    return total_reward
 
 
 def get_direction_highest_reward(ship):
@@ -101,7 +106,7 @@ def get_direction_highest_reward(ship):
     best_direction = Direction.Still
     for test_direction in directions:
         test_location = ship.position.directional_offset(test_direction)
-        halite_at_test_location = evaluate_reward_in_region_from_direction(test_location)
+        halite_at_test_location = evaluate_reward_in_region_from_direction(ship, test_location)
         if halite_at_test_location > max_halite_found and test_location not in fleet_positions_next_turn:
             best_direction = test_direction
             max_halite_found = halite_at_test_location
