@@ -52,10 +52,10 @@ def get_total_halite(game_map):
 def assign_ship_status(ship):
     current_ship_position = ship.position
     if ship.id not in ship_status.keys():
-        ship_status[ship.id] = 'explore'
+        ship_status[ship.id] = 'leaving_shipyard'
     if ship_status[ship.id] == 'returning':
         if current_ship_position == me.shipyard.position:
-            ship_status[ship.id] = 'explore'
+            ship_status[ship.id] = 'leaving_shipyard'
     elif game_map[current_ship_position].halite_amount > 0 and not ship.is_full:
         ship_status[ship.id] = 'harvest'
     elif ship.is_full:
@@ -92,7 +92,7 @@ def safe_navigate(ship, destination):
 def evaluate_reward_in_region_from_direction(ship, position):
     origin  = ship.position
     total_reward = 0
-    cell_occupied_penalty = 300
+    cell_occupied_penalty = 100
     for i in range(-3, 3):
         for j in range(-3, 3):
             scan_position = Position(i, j)
@@ -105,17 +105,16 @@ def evaluate_reward_in_region_from_direction(ship, position):
 
 def get_direction_highest_reward(ship):
     directions = [Direction.North, Direction.South, Direction.East, Direction.West]
-    max_halite_found = -1
+    max_reward_found = -1
     best_direction = Direction.Still
     for test_direction in directions:
         test_location = ship.position.directional_offset(test_direction)
-        halite_at_test_location = evaluate_reward_in_region_from_direction(ship, test_location)
-        if halite_at_test_location > max_halite_found \
+        reward_at_test_location = evaluate_reward_in_region_from_direction(ship, test_location)
+        if reward_at_test_location > max_reward_found \
                 and test_location not in fleet_positions_next_turn \
                 and test_location != me.shipyard.position:
             best_direction = test_direction
-            max_halite_found = halite_at_test_location
-    explore_fringe(ship, best_direction)
+            max_reward_found = reward_at_test_location
     return best_direction
 
 
@@ -150,8 +149,23 @@ def explore_fringe(ship, direction):
     return root_position
 
 
+def get_direction_leaving_shipyard(ship):
+    directions = [Direction.North, Direction.South, Direction.East, Direction.West]
+    while len(directions) > 0:
+        test_direction = random.choice(directions)
+        test_position = ship.position.directional_offset(test_direction)
+        if test_position in fleet_positions_next_turn:
+            directions.remove(test_direction)
+        else:
+            return test_direction
+    return Direction.Still
+
+
 def get_direction_to_move(ship):
     if ship_status[ship.id] != 'harvest':
+
+        if ship_status[ship.id] == 'leaving_shipyard':
+            go_direction = get_direction_leaving_shipyard(ship)
 
         if ship_status[ship.id] == 'explore':
             go_direction = get_direction_highest_reward(ship)
@@ -171,7 +185,7 @@ map_starting_halite_total = get_total_halite(game.game_map)
 REVENUE_EXPECTATION = 6000
 NUMBER_OF_SHIPS_UPPER_LIMIT = map_starting_halite_total / REVENUE_EXPECTATION
 NUMBER_OF_SHIPS_LOWER_LIMIT = 5
-SPAWN_TURN_LIMIT = 320
+SPAWN_TURN_LIMIT = 250
 
 ship_status = {}
 ship_destination = {}

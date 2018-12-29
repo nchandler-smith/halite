@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8dd86b1e-a86e-4632-a9a8-1ec7aae8c870" name="Default Changelist" comment="" />
+    <list default="true" id="8dd86b1e-a86e-4632-a9a8-1ec7aae8c870" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/MyBot.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="211" lean-forward="true" selection-end-line="211" />
+            <state relative-caret-position="-467">
+              <caret line="152" column="83" selection-end-line="226" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
@@ -31,6 +34,7 @@
       <find>total_halite_found</find>
       <find>evaluate_halite_in_region_from_direction</find>
       <find>get_direction_highest_reward</find>
+      <find>harvest</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -45,8 +49,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="195" />
-    <option name="y" value="103" />
+    <option name="x" value="475" />
+    <option name="y" value="74" />
     <option name="width" value="1121" />
     <option name="height" value="1047" />
   </component>
@@ -90,15 +94,16 @@
       <workItem from="1543343843186" duration="1375000" />
       <workItem from="1543413835089" duration="220000" />
       <workItem from="1543670976383" duration="602000" />
-      <workItem from="1546006813187" duration="15611000" />
+      <workItem from="1546006813187" duration="16501000" />
+      <workItem from="1546104635329" duration="6358000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17943000" />
+    <option name="totallyTimeSpent" value="25191000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="195" y="103" width="1121" height="1047" extended-state="0" />
+    <frame x="475" y="74" width="1121" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.21223354" />
@@ -130,8 +135,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="211" lean-forward="true" selection-end-line="211" />
+        <state relative-caret-position="-467">
+          <caret line="152" column="83" selection-end-line="226" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>
