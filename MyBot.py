@@ -81,15 +81,18 @@ def safe_navigate(ship, destination):
         test_location = ship.position.directional_offset(direction)
         distance = game_map.calculate_distance(test_location, destination)
         if distance < min_distance and test_location not in fleet_positions_next_turn:
-            min_distance = distance
-            best_direction = direction
+            if test_location == me.shipyard.position and game_map[test_location].is_occupied:
+                pass
+            else:
+                min_distance = distance
+                best_direction = direction
     return best_direction
 
 
 def evaluate_reward_in_region_from_direction(ship, position):
     origin  = ship.position
     total_reward = 0
-    cell_occupied_penalty = 200
+    cell_occupied_penalty = 300
     for i in range(-3, 3):
         for j in range(-3, 3):
             scan_position = Position(i, j)
@@ -107,7 +110,9 @@ def get_direction_highest_reward(ship):
     for test_direction in directions:
         test_location = ship.position.directional_offset(test_direction)
         halite_at_test_location = evaluate_reward_in_region_from_direction(ship, test_location)
-        if halite_at_test_location > max_halite_found and test_location not in fleet_positions_next_turn:
+        if halite_at_test_location > max_halite_found \
+                and test_location not in fleet_positions_next_turn \
+                and test_location != me.shipyard.position:
             best_direction = test_direction
             max_halite_found = halite_at_test_location
     explore_fringe(ship, best_direction)
@@ -166,7 +171,7 @@ map_starting_halite_total = get_total_halite(game.game_map)
 REVENUE_EXPECTATION = 6000
 NUMBER_OF_SHIPS_UPPER_LIMIT = map_starting_halite_total / REVENUE_EXPECTATION
 NUMBER_OF_SHIPS_LOWER_LIMIT = 5
-SPAWN_TURN_LIMIT = 250
+SPAWN_TURN_LIMIT = 320
 
 ship_status = {}
 ship_destination = {}
