@@ -86,7 +86,7 @@ def safe_navigate(ship, destination):
     return best_direction
 
 
-def evaluate_halite_in_region_from_direction(position):
+def evaluate_reward_in_region_from_direction(position):
     total_halite_found = 0
     for i in range(-3, 3):
         for j in range(-3, 3):
@@ -95,13 +95,13 @@ def evaluate_halite_in_region_from_direction(position):
     return total_halite_found
 
 
-def get_direction_most_halite(ship):
+def get_direction_highest_reward(ship):
     directions = [Direction.North, Direction.South, Direction.East, Direction.West]
     max_halite_found = -1
     best_direction = Direction.Still
     for test_direction in directions:
         test_location = ship.position.directional_offset(test_direction)
-        halite_at_test_location = evaluate_halite_in_region_from_direction(test_location)
+        halite_at_test_location = evaluate_reward_in_region_from_direction(test_location)
         if halite_at_test_location > max_halite_found and test_location not in fleet_positions_next_turn:
             best_direction = test_direction
             max_halite_found = halite_at_test_location
@@ -144,7 +144,7 @@ def get_direction_to_move(ship):
     if ship_status[ship.id] != 'harvest':
 
         if ship_status[ship.id] == 'explore':
-            go_direction = get_direction_most_halite(ship)
+            go_direction = get_direction_highest_reward(ship)
 
         elif ship_status[ship.id] == 'returning':
             go_direction = safe_navigate(ship, me.shipyard.position)
