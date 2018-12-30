@@ -65,6 +65,7 @@ def assign_ship_status(ship):
             ship_status[ship.id] = 'explore'
     else:
         ship_status[ship.id] = 'explore'
+        ship_destination[ship.id] = find_nearby_position_highest_reward(ship)
 
 
 def handle_ships_staying_to_harvest(ship):
@@ -89,38 +90,73 @@ def safe_navigate(ship, destination):
     return best_direction
 
 
-def evaluate_reward_in_region_from_direction(ship, position):
+def evaluate_reward_in_region_from_direction(ship, direction):
+    target_position = ship.position.directional_offset(direction)
     origin  = ship.position
     total_reward = 0
-    cell_occupied_penalty = 100
-    for i in range(-3, 3):
-        for j in range(-3, 3):
-            scan_position = Position(i, j)
-            test_position = position + scan_position
-            distance_from_origin = game_map.calculate_distance(origin, test_position)
-            distance_penalty = distance_from_origin if distance_from_origin > 0 else 1
-            total_reward += (game_map[test_position].halite_amount / distance_penalty) - cell_occupied_penalty * int(game_map[test_position].is_occupied)
+    cell_occupied_penalty = 0
+    box_size = 7
+    if direction  == Direction.North:
+        for i in range(-box_size//2, box_size//2):
+            for j in range(-box_size, 0):
+                scan_position = Position(i, j)
+                test_position = target_position + scan_position
+                distance_from_origin = game_map.calculate_distance(origin, test_position)
+                distance_penalty = distance_from_origin if distance_from_origin > 0 else 1
+                total_reward += (game_map[test_position].halite_amount / distance_penalty) - cell_occupied_penalty * int(game_map[test_position].is_occupied)
+
+    if direction  == Direction.South:
+        for i in range(-box_size//2, box_size//2):
+            for j in range(0, box_size):
+                scan_position = Position(i, j)
+                test_position = target_position + scan_position
+                distance_from_origin = game_map.calculate_distance(origin, test_position)
+                distance_penalty = distance_from_origin if distance_from_origin > 0 else 1
+                total_reward += (game_map[test_position].halite_amount / distance_penalty) - cell_occupied_penalty * int(game_map[test_position].is_occupied)
+
+    if direction  == Direction.East:
+        for i in range(0, box_size):
+            for j in range(-box_size//2, box_size//2):
+                scan_position = Position(i, j)
+                test_position = target_position + scan_position
+                distance_from_origin = game_map.calculate_distance(origin, test_position)
+                distance_penalty = distance_from_origin if distance_from_origin > 0 else 1
+                total_reward += (game_map[test_position].halite_amount / distance_penalty) - cell_occupied_penalty * int(game_map[test_position].is_occupied)
+
+    else:
+        for i in range(-box_size, 0):
+            for j in range(-box_size//2, box_size//2):
+                scan_position = Position(i, j)
+                test_position = target_position + scan_position
+                distance_from_origin = game_map.calculate_distance(origin, test_position)
+                distance_penalty = distance_from_origin if distance_from_origin > 0 else 1
+                total_reward += (game_map[test_position].halite_amount / distance_penalty) - cell_occupied_penalty * int(game_map[test_position].is_occupied)
+
     return total_reward
 
 
-def get_direction_highest_reward(ship):
-    directions = [Direction.North, Direction.South, Direction.East, Direction.West]
+def find_nearby_position_highest_reward(ship):
+    origin = ship.position
+    positions = [Position(0,0), Position(0,-1), Position(1,-1), Position(1,0), Position(1,1),
+                 Position(0,1), Position(-1,1), Position(-1,0), Position(-1,-1)]
     max_reward_found = -1
-    best_direction = Direction.Still
-    for test_direction in directions:
-        test_location = ship.position.directional_offset(test_direction)
-        reward_at_test_location = evaluate_reward_in_region_from_direction(ship, test_location)
-        if reward_at_test_location > max_reward_found \
+    best_position = origin
+    for position in positions:
+        # reward_at_test_direction = evaluate_reward_in_region_from_direction(ship, test_direction)
+        test_location = origin + position
+        reward_at_test_direction = game_map[test_location].halite_amount
+        if reward_at_test_direction > max_reward_found \
                 and test_location not in fleet_positions_next_turn \
                 and test_location != me.shipyard.position:
-            best_direction = test_direction
-            max_reward_found = reward_at_test_location
-    return best_direction
+            best_position = test_location
+            max_reward_found = reward_at_test_direction
+    # explore_fringe(ship, best_direction)
+    return best_position
 
 
 def explore_fringe(ship, direction):
     root_position = ship.position.directional_offset(direction)
-    box_size = 9
+    box_size = 11
     if direction in [Direction.North, Direction.South]:
         for i in range(0, box_size//2):
             new_position_1 = root_position + Position(i, 0)
@@ -166,9 +202,10 @@ def get_direction_to_move(ship):
 
         if ship_status[ship.id] == 'leaving_shipyard':
             go_direction = get_direction_leaving_shipyard(ship)
+            ship_status[ship.id] = 'explore'
 
         if ship_status[ship.id] == 'explore':
-            go_direction = get_direction_highest_reward(ship)
+            go_direction = safe_navigate(ship, ship_destination[ship.id])
 
         elif ship_status[ship.id] == 'returning':
             go_direction = safe_navigate(ship, me.shipyard.position)
@@ -182,7 +219,7 @@ def get_direction_to_move(ship):
 
 
 map_starting_halite_total = get_total_halite(game.game_map)
-REVENUE_EXPECTATION = 6000
+REVENUE_EXPECTATION = 8000
 NUMBER_OF_SHIPS_UPPER_LIMIT = map_starting_halite_total / REVENUE_EXPECTATION
 NUMBER_OF_SHIPS_LOWER_LIMIT = 5
 SPAWN_TURN_LIMIT = 250
