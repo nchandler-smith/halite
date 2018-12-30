@@ -60,9 +60,6 @@ def assign_ship_status(ship):
         ship_status[ship.id] = 'harvest'
     elif ship.is_full:
         ship_status[ship.id] = 'returning'
-    elif ship_status[ship.id] == 'explore_fringe':
-        if ship.position == ship_destination[ship.id]:
-            ship_status[ship.id] = 'explore'
     else:
         ship_status[ship.id] = 'explore'
         ship_destination[ship.id] = find_nearby_position_highest_reward(ship)
@@ -90,51 +87,6 @@ def safe_navigate(ship, destination):
     return best_direction
 
 
-def evaluate_reward_in_region_from_direction(ship, direction):
-    target_position = ship.position.directional_offset(direction)
-    origin  = ship.position
-    total_reward = 0
-    cell_occupied_penalty = 0
-    box_size = 7
-    if direction  == Direction.North:
-        for i in range(-box_size//2, box_size//2):
-            for j in range(-box_size, 0):
-                scan_position = Position(i, j)
-                test_position = target_position + scan_position
-                distance_from_origin = game_map.calculate_distance(origin, test_position)
-                distance_penalty = distance_from_origin if distance_from_origin > 0 else 1
-                total_reward += (game_map[test_position].halite_amount / distance_penalty) - cell_occupied_penalty * int(game_map[test_position].is_occupied)
-
-    if direction  == Direction.South:
-        for i in range(-box_size//2, box_size//2):
-            for j in range(0, box_size):
-                scan_position = Position(i, j)
-                test_position = target_position + scan_position
-                distance_from_origin = game_map.calculate_distance(origin, test_position)
-                distance_penalty = distance_from_origin if distance_from_origin > 0 else 1
-                total_reward += (game_map[test_position].halite_amount / distance_penalty) - cell_occupied_penalty * int(game_map[test_position].is_occupied)
-
-    if direction  == Direction.East:
-        for i in range(0, box_size):
-            for j in range(-box_size//2, box_size//2):
-                scan_position = Position(i, j)
-                test_position = target_position + scan_position
-                distance_from_origin = game_map.calculate_distance(origin, test_position)
-                distance_penalty = distance_from_origin if distance_from_origin > 0 else 1
-                total_reward += (game_map[test_position].halite_amount / distance_penalty) - cell_occupied_penalty * int(game_map[test_position].is_occupied)
-
-    else:
-        for i in range(-box_size, 0):
-            for j in range(-box_size//2, box_size//2):
-                scan_position = Position(i, j)
-                test_position = target_position + scan_position
-                distance_from_origin = game_map.calculate_distance(origin, test_position)
-                distance_penalty = distance_from_origin if distance_from_origin > 0 else 1
-                total_reward += (game_map[test_position].halite_amount / distance_penalty) - cell_occupied_penalty * int(game_map[test_position].is_occupied)
-
-    return total_reward
-
-
 def find_nearby_position_highest_reward(ship):
     origin = ship.position
     positions = [Position(0,0), Position(0,-1), Position(1,-1), Position(1,0), Position(1,1),
@@ -142,7 +94,6 @@ def find_nearby_position_highest_reward(ship):
     max_reward_found = -1
     best_position = origin
     for position in positions:
-        # reward_at_test_direction = evaluate_reward_in_region_from_direction(ship, test_direction)
         test_location = origin + position
         reward_at_test_direction = game_map[test_location].halite_amount
         if reward_at_test_direction > max_reward_found \
@@ -150,39 +101,7 @@ def find_nearby_position_highest_reward(ship):
                 and test_location != me.shipyard.position:
             best_position = test_location
             max_reward_found = reward_at_test_direction
-    # explore_fringe(ship, best_direction)
     return best_position
-
-
-def explore_fringe(ship, direction):
-    root_position = ship.position.directional_offset(direction)
-    box_size = 11
-    if direction in [Direction.North, Direction.South]:
-        for i in range(0, box_size//2):
-            new_position_1 = root_position + Position(i, 0)
-            if new_position_1 not in fleet_positions_next_turn:
-                ship_destination[ship.id] = new_position_1
-                ship_status[ship.id] = 'explore_fringe'
-                return new_position_1
-            new_position_2 = root_position + Position(-1*i, 0)
-            if new_position_2 not in fleet_positions_next_turn:
-                ship_destination[ship.id] = new_position_2
-                ship_status[ship.id] = 'explore_fringe'
-                return new_position_2
-
-    else:
-        for i in range(0, box_size//2):
-            new_position_1 = root_position + Position(0, i)
-            if new_position_1 not in fleet_positions_next_turn:
-                ship_destination[ship.id] = new_position_1
-                ship_status[ship.id] = 'explore_fringe'
-                return new_position_1
-            new_position_2 = root_position + Position(0, -1*i)
-            if new_position_2 not in fleet_positions_next_turn:
-                ship_destination[ship.id] = new_position_2
-                ship_status[ship.id] = 'explore_fringe'
-                return new_position_2
-    return root_position
 
 
 def get_direction_leaving_shipyard(ship):
@@ -209,9 +128,6 @@ def get_direction_to_move(ship):
 
         elif ship_status[ship.id] == 'returning':
             go_direction = safe_navigate(ship, me.shipyard.position)
-
-        elif ship_status[ship.id] == 'explore_fringe':
-            go_direction = safe_navigate(ship, ship_destination[ship.id])
 
         fleet_move_chart[ship.id] = go_direction
         go_position = ship.position.directional_offset(go_direction)
