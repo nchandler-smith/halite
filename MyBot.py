@@ -56,7 +56,7 @@ def assign_ship_status(ship):
     if ship_status[ship.id] == 'returning':
         if current_ship_position == me.shipyard.position:
             ship_status[ship.id] = 'leaving_shipyard'
-    elif game_map[current_ship_position].halite_amount > 0 and not ship.is_full:
+    elif game_map[current_ship_position].halite_amount > HALITE_HARVESTING_THRESHOLD and not ship.is_full:
         ship_status[ship.id] = 'harvest'
     elif ship.is_full:
         ship_status[ship.id] = 'returning'
@@ -118,7 +118,7 @@ def find_nearby_position_highest_reward(ship):
     origin = ship.position
     max_reward_found = -1
     best_position = origin
-    for proximity in range(1, 6):
+    for proximity in range(1, 10):
         positions = get_test_position_offsets_from_proximity(proximity)
         for position in positions:
             test_location = origin + position
@@ -128,7 +128,7 @@ def find_nearby_position_highest_reward(ship):
                     and test_location != me.shipyard.position:
                 best_position = test_location
                 max_reward_found = reward_at_test_direction
-        if game_map[best_position].halite_amount > 0:
+        if game_map[best_position].halite_amount > HALITE_HARVESTING_THRESHOLD:
             return best_position
     return best_position
 
@@ -173,6 +173,7 @@ NUMBER_OF_SHIPS_UPPER_LIMIT = map_starting_halite_total / REVENUE_EXPECTATION
 NUMBER_OF_SHIPS_LOWER_LIMIT = 5
 SPAWN_TURN_LIMIT = 250
 ROLLUP_TURN_BUFFER = 10
+HALITE_HARVESTING_THRESHOLD = 50
 
 ship_status = {}
 ship_destination = {}
