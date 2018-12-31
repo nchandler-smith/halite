@@ -91,7 +91,7 @@ def get_test_position_offsets_from_proximity(proximity):
     position_offsets = []
     if proximity == 1:
         position_offsets.append(Position(0,0))
-    for i in range(-proximity, proximity):
+    for i in range(-proximity, proximity+1):
         position_offsets.append(Position(i, proximity))
         position_offsets.append(Position(i, -proximity))
         position_offsets.append(Position(proximity, i))
