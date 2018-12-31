@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="103" column="16" selection-end-line="190" />
+            <state relative-caret-position="446">
+              <caret line="107" column="34" lean-forward="true" selection-end-line="193" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
@@ -101,7 +101,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32790000" />
+    <option name="totallyTimeSpent" value="32984000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="227" y="126" width="1275" height="996" extended-state="0" />
@@ -136,8 +136,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="103" column="16" selection-end-line="190" />
+        <state relative-caret-position="446">
+          <caret line="107" column="34" lean-forward="true" selection-end-line="193" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>
