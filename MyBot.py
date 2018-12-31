@@ -60,6 +60,8 @@ def assign_ship_status(ship):
         ship_status[ship.id] = 'harvest'
     elif ship.is_full:
         ship_status[ship.id] = 'returning'
+    elif constants.MAX_TURNS - (game.turn_number + game_map.calculate_distance(ship.position, me.shipyard.position)) <= ROLLUP_TURN_BUFFER:
+        ship_status[ship.id] = 'rollup'
     else:
         ship_status[ship.id] = 'explore'
         ship_destination[ship.id] = find_nearby_position_highest_reward(ship)
@@ -84,6 +86,19 @@ def safe_navigate(ship, destination):
             else:
                 min_distance = distance
                 best_direction = direction
+    return best_direction
+
+
+def rollup_navigate(ship, destination):
+    directions = [Direction.North, Direction.South, Direction.East, Direction.West, Direction.Still]
+    min_distance = 1000
+    best_direction = Direction.Still
+    for direction in directions:
+        test_location = ship.position.directional_offset(direction)
+        distance = game_map.calculate_distance(test_location, destination)
+        if distance < min_distance and test_location not in fleet_positions_next_turn:
+            min_distance = distance
+            best_direction = direction
     return best_direction
 
 
@@ -132,7 +147,6 @@ def get_direction_leaving_shipyard(ship):
 
 def get_direction_to_move(ship):
     if ship_status[ship.id] != 'harvest':
-
         if ship_status[ship.id] == 'leaving_shipyard':
             go_direction = get_direction_leaving_shipyard(ship)
             ship_status[ship.id] = 'explore'
@@ -143,9 +157,14 @@ def get_direction_to_move(ship):
         elif ship_status[ship.id] == 'returning':
             go_direction = safe_navigate(ship, me.shipyard.position)
 
+        elif ship_status[ship.id] == 'rollup':
+            go_direction = rollup_navigate(ship, me.shipyard.position)
+
         fleet_move_chart[ship.id] = go_direction
         go_position = ship.position.directional_offset(go_direction)
-        fleet_positions_next_turn.append(go_position)
+        if not (ship.position.directional_offset(go_direction) == me.shipyard.position
+                and ship_status[ship.id] == 'rollup'):
+            fleet_positions_next_turn.append(go_position)
 
 
 map_starting_halite_total = get_total_halite(game.game_map)
@@ -153,6 +172,7 @@ REVENUE_EXPECTATION = 8000
 NUMBER_OF_SHIPS_UPPER_LIMIT = map_starting_halite_total / REVENUE_EXPECTATION
 NUMBER_OF_SHIPS_LOWER_LIMIT = 5
 SPAWN_TURN_LIMIT = 250
+ROLLUP_TURN_BUFFER = 10
 
 ship_status = {}
 ship_destination = {}
