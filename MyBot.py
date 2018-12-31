@@ -87,20 +87,34 @@ def safe_navigate(ship, destination):
     return best_direction
 
 
+def get_test_position_offsets_from_proximity(proximity):
+    position_offsets = []
+    if proximity == 1:
+        position_offsets.append(Position(0,0))
+    for i in range(-proximity, proximity):
+        position_offsets.append(Position(i, proximity))
+        position_offsets.append(Position(i, -proximity))
+        position_offsets.append(Position(proximity, i))
+        position_offsets.append(Position(-proximity, i))
+    return position_offsets
+
+
 def find_nearby_position_highest_reward(ship):
     origin = ship.position
-    positions = [Position(0,0), Position(0,-1), Position(1,-1), Position(1,0), Position(1,1),
-                 Position(0,1), Position(-1,1), Position(-1,0), Position(-1,-1)]
     max_reward_found = -1
     best_position = origin
-    for position in positions:
-        test_location = origin + position
-        reward_at_test_direction = game_map[test_location].halite_amount
-        if reward_at_test_direction > max_reward_found \
-                and test_location not in fleet_positions_next_turn \
-                and test_location != me.shipyard.position:
-            best_position = test_location
-            max_reward_found = reward_at_test_direction
+    for proximity in range(1, 6):
+        positions = get_test_position_offsets_from_proximity(proximity)
+        for position in positions:
+            test_location = origin + position
+            reward_at_test_direction = game_map[test_location].halite_amount
+            if reward_at_test_direction > max_reward_found \
+                    and test_location not in fleet_positions_next_turn \
+                    and test_location != me.shipyard.position:
+                best_position = test_location
+                max_reward_found = reward_at_test_direction
+        if game_map[best_position].halite_amount > 0:
+            return best_position
     return best_position
 
 

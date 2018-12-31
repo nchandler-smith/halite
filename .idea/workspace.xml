@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="61" column="42" selection-end-line="179" />
+            <state relative-caret-position="365">
+              <caret line="103" column="16" selection-end-line="190" />
               <folding>
                 <element signature="e#105#133#0" expanded="true" />
               </folding>
@@ -49,8 +49,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="426" />
-    <option name="y" value="57" />
+    <option name="x" value="227" />
+    <option name="y" value="126" />
     <option name="width" value="1275" />
     <option name="height" value="996" />
   </component>
@@ -96,15 +96,15 @@
       <workItem from="1543670976383" duration="602000" />
       <workItem from="1546006813187" duration="16501000" />
       <workItem from="1546104635329" duration="6358000" />
-      <workItem from="1546206767406" duration="4431000" />
+      <workItem from="1546206767406" duration="6057000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31164000" />
+    <option name="totallyTimeSpent" value="32790000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="426" y="57" width="1275" height="996" extended-state="0" />
+    <frame x="227" y="126" width="1275" height="996" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.21223354" />
@@ -136,8 +136,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="61" column="42" selection-end-line="179" />
+        <state relative-caret-position="365">
+          <caret line="103" column="16" selection-end-line="190" />
           <folding>
             <element signature="e#105#133#0" expanded="true" />
           </folding>
